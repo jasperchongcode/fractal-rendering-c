@@ -8,6 +8,7 @@ int game_is_running;
 
 SDL_Window *window;
 SDL_Renderer *renderer;
+SDL_Texture *texture;
 
 int initialise_window(int window_height)
 {
@@ -34,6 +35,12 @@ int initialise_window(int window_height)
     if (!renderer)
     {
         fprintf(stderr, "Error creating SDL Renderer.\n");
+        return FALSE;
+    }
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (!texture)
+    {
+        fprintf(stderr, "Error creating SDL Texture.\n");
         return FALSE;
     }
     return TRUE;

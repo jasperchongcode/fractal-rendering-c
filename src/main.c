@@ -6,10 +6,13 @@
 #include "main.h"
 
 Complex C = {1, 1};
+// memory buffer
+
+uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
 
 void render_fractal(void)
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
+	// SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
 	SDL_RenderClear(renderer);
 
 	float pixel_width = (X_MAX - X_MIN) / WINDOW_WIDTH;
@@ -32,12 +35,16 @@ void render_fractal(void)
 			EscapeResult escapeResult = verify_in_julia(point, C); // using julia instea dof mandelbrot
 			// EscapeResult escapeResult = verify_in_mandelbrot(point);
 			ColourRGBA pixel_colour = get_pixel_colour(escapeResult);
+			uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+			pixels[r * WINDOW_WIDTH + c] = flat_colour;
 			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escapeResult.steps, pixel_colour.r);
-			SDL_SetRenderDrawColor(renderer, pixel_colour.r, pixel_colour.g, pixel_colour.b, pixel_colour.a);
-			SDL_RenderDrawPoint(renderer, c, r);
+			// SDL_SetRenderDrawColor(renderer, pixel_colour.r, pixel_colour.g, pixel_colour.b, pixel_colour.a);
+			// SDL_RenderDrawPoint(renderer, c, r);
 		}
 	}
-
+	// swap to buffer
+	SDL_UpdateTexture(texture, NULL, pixels, WINDOW_WIDTH * sizeof(uint32_t));
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer); // swap buffers
 	printf("RENDERED NEW FRACTAL\n");
 }

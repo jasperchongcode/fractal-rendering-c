@@ -2,12 +2,12 @@
 #include "./constants.h"
 #include "./sdl_helpers.h"
 
-const int WINDOW_HEIGHT = (int)((y_max - y_min) / (x_max - x_min) * WINDOW_WIDTH);
+int game_is_running;
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-int initialise_window(void)
+int initialise_window(int window_height)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -19,8 +19,10 @@ int initialise_window(void)
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
-        WINDOW_HEIGHT,
+        window_height,
         SDL_WINDOW_BORDERLESS);
+
+    printf("WINDOW HEIGHT %d \n", window_height);
     if (!window)
     {
         fprintf(stderr, "Error creating SDL.\n");
@@ -41,4 +43,22 @@ void destroy_window()
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+void process_input(void)
+{
+    SDL_Event event;
+    SDL_PollEvent(&event);
+    switch (event.type)
+    {
+    case SDL_QUIT:
+        game_is_running = FALSE;
+        break;
+    case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_ESCAPE)
+        {
+            game_is_running = FALSE;
+        }
+        break;
+    }
 }

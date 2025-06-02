@@ -1,41 +1,16 @@
 #include <SDL2/SDL.h>
-#include "./constants.h"
-#include "./mandelbrot.h"
-#include "./colour.h"
-#include "./sdl_helpers.h"
-
-int game_is_running;
-
-void process_input(void)
-{
-	SDL_Event event;
-	SDL_PollEvent(&event);
-	switch (event.type)
-	{
-	case SDL_QUIT:
-		game_is_running = FALSE;
-		break;
-	case SDL_KEYDOWN:
-		if (event.key.keysym.sym == SDLK_ESCAPE)
-		{
-			game_is_running = FALSE;
-		}
-		break;
-	}
-}
-
-void setup()
-{
-	initialise_colour_map();
-}
+#include "constants.h"
+#include "mandelbrot.h"
+#include "colour.h"
+#include "sdl_helpers.h"
 
 void render_fractal()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
 	SDL_RenderClear(renderer);
 
-	float pixel_width = (x_max - x_min) / WINDOW_WIDTH;
-	float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
+	float pixel_width = (X_MAX - X_MIN) / WINDOW_WIDTH;
+	float pixel_height = (Y_MAX - Y_MIN) / WINDOW_HEIGHT;
 	// for each pixel, take a representative point in the "top left"
 
 	for (int r = 0; r < WINDOW_HEIGHT; r++)
@@ -43,12 +18,12 @@ void render_fractal()
 		for (int c = 0; c < WINDOW_WIDTH; c++)
 		{
 			// pixel representativ coords (x,y) = (x_min + c*pixel_width, y_min+r*pixel_height)
-			float re = x_min + c * pixel_width;
-			float im = y_min + r * pixel_height;
-			// todo make some draw pixel function
-			int escape_steps = verify_in_mandelbrot(re, im);
-			ColourRGBA pixel_colour = get_pixel_colour(escape_steps);
-			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escape_steps, pixel_colour);
+			float re = X_MIN + c * pixel_width;
+			float im = Y_MIN + r * pixel_height;
+
+			EscapeResult escapeResult = verify_in_mandelbrot(re, im);
+			ColourRGBA pixel_colour = get_pixel_colour(escapeResult);
+			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escapeResult.steps, pixel_colour.r);
 			SDL_SetRenderDrawColor(renderer, pixel_colour.r, pixel_colour.g, pixel_colour.b, pixel_colour.a);
 			SDL_RenderDrawPoint(renderer, c, r);
 		}
@@ -59,9 +34,9 @@ void render_fractal()
 
 int main()
 {
-	game_is_running = initialise_window();
+	game_is_running = initialise_window(WINDOW_HEIGHT);
 
-	setup();
+	// initialise_colour_map();
 	render_fractal();
 
 	while (game_is_running)

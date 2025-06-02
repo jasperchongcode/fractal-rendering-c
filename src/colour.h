@@ -1,6 +1,7 @@
 #ifndef COLOUR_H
 #define COLOUR_H
 
+#include "mandelbrot.h"
 typedef struct
 {
     uint8_t r;
@@ -13,6 +14,6 @@ extern ColourRGBA COLOUR_MAP[1000];
 
 void initialise_colour_map(void);
 
-ColourRGBA get_pixel_colour(int escape_steps);
+ColourRGBA get_pixel_colour(EscapeResult escapeResult);
 
 #endif

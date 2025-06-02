@@ -1,7 +1,8 @@
 #include <math.h>
 #include <SDL2/SDL.h>
-#include "./constants.h"
-#include "./colour.h"
+#include "constants.h"
+#include "colour.h"
+#include "mandelbrot.h"
 
 ColourRGBA COLOUR_MAP[1000];
 
@@ -16,8 +17,14 @@ void initialise_colour_map()
     }
 }
 
-ColourRGBA get_pixel_colour(int escape_steps)
+float get_renormalised_count(int steps, float final_z_re, float final_z_im)
 {
+    return (float)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
+}
+
+ColourRGBA get_pixel_colour(EscapeResult escapeResult)
+{
+    int escape_steps = escapeResult.steps;
     ColourRGBA colour;
 
     // Linear from 0 to 255

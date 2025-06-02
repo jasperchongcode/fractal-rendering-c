@@ -4,9 +4,11 @@
 #define WINDOW_WIDTH 900
 // #define WINDOW_HEIGHT 600
 
-#define x_min -1.8
-#define x_max -1.74
-#define y_min -0.025
-#define y_max 0.025
+#define X_MIN -2.0f
+#define X_MAX 1.0f
+#define Y_MIN -1.0f
+#define Y_MAX 1.0f
+
+#define WINDOW_HEIGHT ((int)(((Y_MAX - Y_MIN) / (X_MAX - X_MIN)) * WINDOW_WIDTH))
 
 #define MAX_STEPS 200

@@ -3,13 +3,16 @@
 
 #include <SDL2/SDL.h>
 
-extern const int WINDOW_HEIGHT;
+// extern const int WINDOW_HEIGHT;
+extern int game_is_running;
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 
-int initialise_window(void);
+int initialise_window(int);
 
 void destroy_window(void);
+
+void process_input(void);
 
 #endif

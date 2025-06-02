@@ -1,20 +1,17 @@
 #include <math.h>
+#include <stdio.h>
 #include "mandelbrot.h"
 #include "constants.h"
 
-float get_distance_origin(float re, float im)
-{
-    return sqrt(re * re + im * im);
-}
+// float get_distance_origin(float re, float im)
+// {
+//     return sqrt(re * re + im * im);
+// }
 
 /**
- * @brief  Returns steps until escapes (or max steps)
- *
- * @param x
- * @param y
- * @return int
+ * returns renormalised count to prevent bands, return -1 if never escapes
  */
-int verify_in_mandelbrot(float re, float im)
+EscapeResult verify_in_mandelbrot(float re, float im)
 {
     // Defined to escape if at any point it leaves a circle of radius 2
 
@@ -23,9 +20,15 @@ int verify_in_mandelbrot(float re, float im)
 
     for (int i = 0; i < MAX_STEPS; i++)
     {
-        if (get_distance_origin(z_re, z_im) >= 2)
+        if ((z_re * z_re + z_im * z_im) >= 4)
         {
-            return i;
+            EscapeResult output;
+            output.steps = i;
+            output.z_re = z_re;
+            output.z_im = z_im;
+            // printf("Escaped at %d steps for point (%f, %f)\n", i, re, im);
+            return output;
+            // return i;
         }
         // Otherwise iterate re and im
         // (a+bi)^2 = a^2 +2abi -b^2k
@@ -33,6 +36,10 @@ int verify_in_mandelbrot(float re, float im)
         z_re = z_re * z_re - z_im * z_im + re; // re(z)^2 -im(z)^2 + re(c)
         z_im = 2 * z_re_prev * z_im + im;      // 2*re(z)*im(z) + im(c)
     }
-
-    return MAX_STEPS;
+    // printf("MADE TO END %d \n", 2);
+    EscapeResult output;
+    output.steps = MAX_STEPS;
+    output.z_re = z_re;
+    output.z_im = z_im;
+    return output;
 }

@@ -103,17 +103,50 @@ void destroy_window()
 	SDL_Quit();
 }
 
+void render_fractal()
+{
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
+	SDL_RenderClear(renderer);
+
+	float x_min = -2;
+	float x_max = 1;
+	float y_min = -1;
+	float y_max = 1;
+
+	float pixel_width = (x_max - x_min) / WINDOW_WIDTH;
+	float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
+	// for each pixel, take a representative point in the "top left"
+
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	for (int r = 0; r < WINDOW_HEIGHT; r++)
+	{
+		for (int c = 0; c < WINDOW_WIDTH; c++)
+		{
+			// pixel representativ coords (x,y) = (x_min + c*pixel_width, y_min+r*pixel_height)
+			// todo make some draw pixel function
+			if (x_min + c * pixel_width >= 0)
+			{
+				SDL_RenderDrawPoint(renderer, c, r);
+			}
+		}
+	}
+
+	SDL_RenderPresent(renderer); // swap buffers
+}
+
 int main()
 {
 	game_is_running = initialize_window();
 
 	setup();
+	render_fractal();
 
 	while (game_is_running)
 	{
 		process_input();
-		update();
-		render();
+		// update();
+		// render();
 	}
 
 	destroy_window();

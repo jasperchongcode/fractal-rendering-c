@@ -16,6 +16,6 @@ extern ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 
 void initialise_colour_map(void);
 
-ColourRGBA get_pixel_colour(EscapeResult escapeResult);
+ColourRGBA get_pixel_colour(EscapeResult *escapeResult, int length);
 
 #endif

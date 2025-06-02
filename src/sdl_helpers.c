@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h> // for saving image to file
 #include "./constants.h"
-#include "main.h"
+#include "render.h"
 #include "./sdl_helpers.h"
 #include "fractal.h"
 

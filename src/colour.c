@@ -26,8 +26,8 @@ void initialise_colour_map()
 
         // Simple linear ramp to neon green
         Uint8 green = (Uint8)(brightness * 255); // green increases
-        Uint8 blue = 0;                          //(Uint8)(t * t * 80); // optional faint glow
-        Uint8 red = 0;                           // red stays 0
+        Uint8 blue = 0;
+        Uint8 red = 0; // red stays 0
 
         COLOUR_MAP[i].r = red;
         COLOUR_MAP[i].g = green;
@@ -41,23 +41,52 @@ float get_renormalised_count(int steps, float final_z_re, float final_z_im)
     return (float)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
 }
 
-ColourRGBA get_pixel_colour(EscapeResult escapeResult)
+double average(float *arr, int length)
 {
-    ColourRGBA colour;
+    if (length == 0)
+        return 0.0; // Avoid division by zero
 
-    if (escapeResult.steps == MAX_STEPS)
+    float sum = 0; // Use long long to avoid overflow for large sums
+    for (int i = 0; i < length; i++)
     {
+        sum += arr[i];
+    }
+
+    return (double)sum / length;
+}
+
+ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
+{
+    float smoothed[num_results];
+    for (int i = 0; i < num_results; i++)
+    {
+        if (escapeResults[i].steps == MAX_STEPS)
+        {
+            smoothed[i] = 1;
+        }
+        else
+        {
+            smoothed[i] = get_renormalised_count(escapeResults[i].steps, escapeResults[i].z_re, escapeResults[i].z_im) / MAX_STEPS; // between 0 and 1
+        }
+    }
+
+    int index = (int)(average(smoothed, num_results) * COLOUR_MAP_LENGTH);
+
+    if (index >= COLOUR_MAP_LENGTH)
+    {
+        // if it is fully in the set, return black:
+        ColourRGBA colour;
         colour.r = 0;
         colour.g = 0;
         colour.b = 0;
         colour.a = 255;
         return colour;
-        // return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
+        return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
     }
-    float smoothed = get_renormalised_count(escapeResult.steps, escapeResult.z_re, escapeResult.z_im) / MAX_STEPS; // between 0 and 1
-
-    // todo make it interpolate between the nearest two counts
-    return COLOUR_MAP[(int)(smoothed * COLOUR_MAP_LENGTH)];
+    else
+    {
+        return COLOUR_MAP[index];
+    }
     // return COLOUR_MAP[(int)(((float)escapeResult.steps / MAX_STEPS) * COLOUR_MAP_LENGTH)];
 
     // int escape_steps = escapeResult.steps;

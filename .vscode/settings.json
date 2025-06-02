@@ -5,6 +5,8 @@
         "sdl_helpers.h": "c",
         "sdl.h": "c",
         "mandelbrot.h": "c",
-        "colour.h": "c"
+        "colour.h": "c",
+        "fractal.h": "c",
+        "omp.h": "c"
     }
 }

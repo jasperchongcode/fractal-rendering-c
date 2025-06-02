@@ -12,3 +12,4 @@
 #define WINDOW_HEIGHT ((int)(((Y_MAX - Y_MIN) / (X_MAX - X_MIN)) * WINDOW_WIDTH))
 
 #define MAX_STEPS 100
+#define SAMPLE_GRID_WIDTH 2 // makes a grid 2 high and 2 wide for sampling each pixel

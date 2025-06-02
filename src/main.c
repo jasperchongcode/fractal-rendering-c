@@ -36,7 +36,7 @@ int main()
 {
 	game_is_running = initialise_window(WINDOW_HEIGHT);
 
-	// initialise_colour_map();
+	initialise_colour_map();
 	render_fractal();
 
 	while (game_is_running)

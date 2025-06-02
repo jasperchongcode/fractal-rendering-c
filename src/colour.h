@@ -10,7 +10,9 @@ typedef struct
     uint8_t a;
 } ColourRGBA;
 
-extern ColourRGBA COLOUR_MAP[1000];
+#define COLOUR_MAP_LENGTH 1000
+
+extern ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 
 void initialise_colour_map(void);
 

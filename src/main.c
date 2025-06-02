@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include <SDL2/SDL.h>
 #include "./constants.h"
 
@@ -61,32 +62,6 @@ void process_input(void)
 	}
 }
 
-void update()
-{
-	// Waste some time until next frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME))
-		;
-	// Logic to keep a fixed timestamp
-
-	last_frame_time = SDL_GetTicks();
-	ball.x++;
-	ball.y++;
-}
-
-void render()
-{
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-
-	// Draw a rectangle
-	SDL_Rect ball_rect = {(int)ball.x, (int)ball.y, (int)ball.width, (int)ball.height};
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(renderer, &ball_rect);
-
-	SDL_RenderPresent(renderer); // Swap the buffers
-}
-
 void setup()
 {
 	ball.x = 20;
@@ -103,6 +78,41 @@ void destroy_window()
 	SDL_Quit();
 }
 
+float get_distance_origin(float re, float im)
+{
+	return sqrt(re * re + im * im);
+}
+
+/**
+ * @brief  Returns steps until escapes (or max steps)
+ *
+ * @param x
+ * @param y
+ * @return int
+ */
+int verify_in_mandelbrot(float re, float im)
+{
+	// Defined to escape if at any point it leaves a circle of radius 2
+
+	float z_re = 0;
+	float z_im = 0;
+
+	for (int i = 0; i < MAX_STEPS; i++)
+	{
+		if (get_distance_origin(z_re, z_im) >= 2)
+		{
+			return i;
+		}
+		// Otherwise iterate re and im
+		// (a+bi)^2 = a^2 +2abi -b^2k
+		float z_re_prev = z_re;
+		z_re = z_re * z_re - z_im * z_im + re; // re(z)^2 -im(z)^2 + re(c)
+		z_im = 2 * z_re_prev * z_im + im;	   // 2*re(z)*im(z) + im(c)
+	}
+
+	return MAX_STEPS;
+}
+
 void render_fractal()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
@@ -117,18 +127,18 @@ void render_fractal()
 	float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
 	// for each pixel, take a representative point in the "top left"
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
 	for (int r = 0; r < WINDOW_HEIGHT; r++)
 	{
 		for (int c = 0; c < WINDOW_WIDTH; c++)
 		{
 			// pixel representativ coords (x,y) = (x_min + c*pixel_width, y_min+r*pixel_height)
+			float re = x_min + c * pixel_width;
+			float im = y_min + r * pixel_height;
 			// todo make some draw pixel function
-			if (x_min + c * pixel_width >= 0)
-			{
-				SDL_RenderDrawPoint(renderer, c, r);
-			}
+			int escape_steps = verify_in_mandelbrot(re, im);
+			int pixel_colour = (int)((escape_steps / (float)MAX_STEPS) * 255.0f); // get the pixel colour between 0 and 255
+			SDL_SetRenderDrawColor(renderer, pixel_colour, pixel_colour, pixel_colour, 255);
+			SDL_RenderDrawPoint(renderer, c, r);
 		}
 	}
 

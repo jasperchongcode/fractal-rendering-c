@@ -1,7 +1,7 @@
 #ifndef COLOUR_H
 #define COLOUR_H
 
-#include "mandelbrot.h"
+#include "fractal.h"
 typedef struct
 {
     uint8_t r;

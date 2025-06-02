@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include "./constants.h"
+#include "main.h"
 #include "./sdl_helpers.h"
+#include "fractal.h"
 
 int game_is_running;
 
@@ -45,6 +47,25 @@ void destroy_window()
     SDL_Quit();
 }
 
+void handle_mouse_move(int x, int y)
+{
+    // need to get the centered coords with 0,0 as centre
+    x -= WINDOW_WIDTH / 2;
+    y -= WINDOW_HEIGHT / 2;
+
+    float normalised_x = ((float)x) / WINDOW_WIDTH;
+    float normalised_y = ((float)y) / WINDOW_HEIGHT;
+
+    Complex new_c;
+    new_c.re = normalised_x * X_MAX + (1 - normalised_x) * X_MIN;
+    new_c.im = normalised_y * Y_MAX + (1 - normalised_y) * Y_MIN;
+
+    C = new_c;
+    printf("HANLDING MOUSE MOVE (%f, %f)\n", new_c.re, new_c.im);
+
+    render_fractal();
+}
+
 void process_input(void)
 {
     SDL_Event event;
@@ -62,6 +83,7 @@ void process_input(void)
         break;
     case SDL_MOUSEMOTION:
         // printf("(%d, %d)", event.motion.x, event.motion.y);
+        handle_mouse_move(event.motion.x, event.motion.y);
         break;
     }
 }

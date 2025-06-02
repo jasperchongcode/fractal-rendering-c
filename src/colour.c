@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include "constants.h"
 #include "colour.h"
-#include "mandelbrot.h"
+#include "fractal.h"
 
 ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 

@@ -1,10 +1,13 @@
 #include <SDL2/SDL.h>
 #include "constants.h"
-#include "mandelbrot.h"
+#include "fractal.h"
 #include "colour.h"
 #include "sdl_helpers.h"
+#include "main.h"
 
-void render_fractal()
+Complex C = {1, 1};
+
+void render_fractal(void)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
 	SDL_RenderClear(renderer);
@@ -17,15 +20,17 @@ void render_fractal()
 	{
 		for (int c = 0; c < WINDOW_WIDTH; c++)
 		{
+			Complex point;
 			// pixel representativ coords (x,y) = (x_min + c*pixel_width, y_min+r*pixel_height)
-			float re = X_MIN + c * pixel_width;
-			float im = Y_MIN + r * pixel_height;
+			point.re = X_MIN + c * pixel_width;
+			point.im = Y_MIN + r * pixel_height;
 
 			// make the representative point the middle of the pixel
-			re += pixel_width / 2;
-			im += pixel_height / 2;
+			point.re += pixel_width / 2;
+			point.im += pixel_height / 2;
 
-			EscapeResult escapeResult = verify_in_mandelbrot(re, im);
+			EscapeResult escapeResult = verify_in_julia(point, C); // using julia instea dof mandelbrot
+			// EscapeResult escapeResult = verify_in_mandelbrot(point);
 			ColourRGBA pixel_colour = get_pixel_colour(escapeResult);
 			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escapeResult.steps, pixel_colour.r);
 			SDL_SetRenderDrawColor(renderer, pixel_colour.r, pixel_colour.g, pixel_colour.b, pixel_colour.a);
@@ -34,6 +39,7 @@ void render_fractal()
 	}
 
 	SDL_RenderPresent(renderer); // swap buffers
+	printf("RENDERED NEW FRACTAL\n");
 }
 
 int main()

@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h> // for saving image to file
 #include "./constants.h"
 #include "main.h"
 #include "./sdl_helpers.h"
@@ -68,9 +69,29 @@ void handle_mouse_move(int x, int y)
     new_c.im = normalised_y * Y_MAX + (1 - normalised_y) * Y_MIN;
 
     C = new_c;
-    printf("HANLDING MOUSE MOVE (%f, %f)\n", new_c.re, new_c.im);
+    // printf("HANLDING MOUSE MOVE (%f, %f)\n", new_c.re, new_c.im);
 
     render_fractal();
+}
+
+// code taken from https://stackoverflow.com/questions/34255820/save-sdl-texture-to-file
+void save_texture(const char *file_name, SDL_Renderer *renderer, SDL_Texture *texture)
+{
+    SDL_Texture *target = SDL_GetRenderTarget(renderer);
+    SDL_SetRenderTarget(renderer, texture);
+    int width, height;
+    SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+    SDL_RenderReadPixels(renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+    IMG_SavePNG(surface, file_name);
+    SDL_FreeSurface(surface);
+    SDL_SetRenderTarget(renderer, target);
+}
+
+void handle_save_image(void)
+{
+    save_texture("./output.png", renderer, texture);
+    printf("Saved image");
 }
 
 void process_input(void)
@@ -86,6 +107,10 @@ void process_input(void)
         if (event.key.keysym.sym == SDLK_ESCAPE)
         {
             game_is_running = FALSE;
+        }
+        else if (event.key.keysym.sym == SDLK_s)
+        {
+            handle_save_image();
         }
         break;
     case SDL_MOUSEMOTION:

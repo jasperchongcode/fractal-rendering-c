@@ -1,3 +1,9 @@
 {
-    "makefile.configureOnOpen": true
+    "makefile.configureOnOpen": true,
+    "files.associations": {
+        "constants.h": "c",
+        "sdl_helpers.h": "c",
+        "sdl.h": "c",
+        "mandelbrot.h": "c"
+    }
 }

@@ -1,13 +1,6 @@
 #ifndef COLOUR_H
 #define COLOUR_H
 
-#include <stdint.h>    // for uint8_t
-#include "constants.h" // for COLOUR_MAP_SIZE
-
-/**
- * RGBA colour struct.
- * We’ll store each channel in a single-byte (0..255).
- */
 typedef struct
 {
     uint8_t r;

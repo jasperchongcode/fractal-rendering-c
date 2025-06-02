@@ -11,4 +11,4 @@
 
 #define WINDOW_HEIGHT ((int)(((Y_MAX - Y_MIN) / (X_MAX - X_MIN)) * WINDOW_WIDTH))
 
-#define MAX_STEPS 50
+#define MAX_STEPS 200

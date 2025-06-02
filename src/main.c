@@ -4,6 +4,7 @@
 #include "colour.h"
 #include "sdl_helpers.h"
 #include "main.h"
+#include <omp.h>
 
 Complex C = {1, 1};
 // memory buffer
@@ -19,6 +20,7 @@ void render_fractal(void)
 	float pixel_height = (Y_MAX - Y_MIN) / WINDOW_HEIGHT;
 	// for each pixel, take a representative point in the "top left"
 
+#pragma omp parallel for schedule(dynamic, 1)
 	for (int r = 0; r < WINDOW_HEIGHT; r++)
 	{
 		for (int c = 0; c < WINDOW_WIDTH; c++)

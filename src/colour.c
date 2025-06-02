@@ -22,12 +22,12 @@ void initialise_colour_map()
     {
         float t = (float)i / (COLOUR_MAP_LENGTH - 1); // normalized 0..1
 
-        // float brightness = logf(1 + t) / logf(2); // nonlinear log
+        float brightness = logf(1 + 9 * t) / logf(10); // nonlinear log
 
         // Simple linear ramp to neon green
-        Uint8 green = (Uint8)(t * 255); // green increases
-        Uint8 blue = 0;                 //(Uint8)(t * t * 80); // optional faint glow
-        Uint8 red = 0;                  // red stays 0
+        Uint8 green = (Uint8)(brightness * 255); // green increases
+        Uint8 blue = 0;                          //(Uint8)(t * t * 80); // optional faint glow
+        Uint8 red = 0;                           // red stays 0
 
         COLOUR_MAP[i].r = red;
         COLOUR_MAP[i].g = green;

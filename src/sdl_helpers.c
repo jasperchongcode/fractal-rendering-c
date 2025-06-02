@@ -56,9 +56,9 @@ void destroy_window()
 
 void handle_mouse_move(int x, int y)
 {
-    // need to get the centered coords with 0,0 as centre
-    x -= WINDOW_WIDTH / 2;
-    y -= WINDOW_HEIGHT / 2;
+    // // need to get the centered coords with 0,0 as centre
+    // x -= WINDOW_WIDTH / 2;
+    // y -= WINDOW_HEIGHT / 2;
 
     float normalised_x = ((float)x) / WINDOW_WIDTH;
     float normalised_y = ((float)y) / WINDOW_HEIGHT;

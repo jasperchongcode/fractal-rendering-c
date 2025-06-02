@@ -2,21 +2,17 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include "./constants.h"
+#include "./mandelbrot.h"
+#include "./colour.h"
+
+const int WINDOW_HEIGHT = (int)((y_max - y_min) / (x_max - x_min) * WINDOW_WIDTH);
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 int game_is_running;
 int last_frame_time = 0;
 
-struct ball
-{
-	float x;
-	float y;
-	float width;
-	float height;
-} ball;
-
-int initialize_window(void)
+int initialise_window(void)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
@@ -64,10 +60,7 @@ void process_input(void)
 
 void setup()
 {
-	ball.x = 20;
-	ball.y = 20;
-	ball.width = 15;
-	ball.height = 15;
+	initialise_colour_map();
 }
 
 void destroy_window()
@@ -78,50 +71,10 @@ void destroy_window()
 	SDL_Quit();
 }
 
-float get_distance_origin(float re, float im)
-{
-	return sqrt(re * re + im * im);
-}
-
-/**
- * @brief  Returns steps until escapes (or max steps)
- *
- * @param x
- * @param y
- * @return int
- */
-int verify_in_mandelbrot(float re, float im)
-{
-	// Defined to escape if at any point it leaves a circle of radius 2
-
-	float z_re = 0;
-	float z_im = 0;
-
-	for (int i = 0; i < MAX_STEPS; i++)
-	{
-		if (get_distance_origin(z_re, z_im) >= 2)
-		{
-			return i;
-		}
-		// Otherwise iterate re and im
-		// (a+bi)^2 = a^2 +2abi -b^2k
-		float z_re_prev = z_re;
-		z_re = z_re * z_re - z_im * z_im + re; // re(z)^2 -im(z)^2 + re(c)
-		z_im = 2 * z_re_prev * z_im + im;	   // 2*re(z)*im(z) + im(c)
-	}
-
-	return MAX_STEPS;
-}
-
 void render_fractal()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
 	SDL_RenderClear(renderer);
-
-	float x_min = -2;
-	float x_max = 1;
-	float y_min = -1;
-	float y_max = 1;
 
 	float pixel_width = (x_max - x_min) / WINDOW_WIDTH;
 	float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
@@ -136,8 +89,9 @@ void render_fractal()
 			float im = y_min + r * pixel_height;
 			// todo make some draw pixel function
 			int escape_steps = verify_in_mandelbrot(re, im);
-			int pixel_colour = (int)((escape_steps / (float)MAX_STEPS) * 255.0f); // get the pixel colour between 0 and 255
-			SDL_SetRenderDrawColor(renderer, pixel_colour, pixel_colour, pixel_colour, 255);
+			ColourRGBA pixel_colour = get_pixel_colour(escape_steps);
+			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escape_steps, pixel_colour);
+			SDL_SetRenderDrawColor(renderer, pixel_colour.r, pixel_colour.g, pixel_colour.b, pixel_colour.a);
 			SDL_RenderDrawPoint(renderer, c, r);
 		}
 	}
@@ -147,7 +101,7 @@ void render_fractal()
 
 int main()
 {
-	game_is_running = initialize_window();
+	game_is_running = initialise_window();
 
 	setup();
 	render_fractal();

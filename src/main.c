@@ -21,6 +21,10 @@ void render_fractal()
 			float re = X_MIN + c * pixel_width;
 			float im = Y_MIN + r * pixel_height;
 
+			// make the representative point the middle of the pixel
+			re += pixel_width / 2;
+			im += pixel_height / 2;
+
 			EscapeResult escapeResult = verify_in_mandelbrot(re, im);
 			ColourRGBA pixel_colour = get_pixel_colour(escapeResult);
 			// printf("ESCAPE STEPS: %d, PIXEL COLOUR: %d\n", escapeResult.steps, pixel_colour.r);

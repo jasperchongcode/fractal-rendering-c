@@ -1,4 +1,3 @@
-#include <SDL2/SDL.h>
 #include "constants.h"
 #include "sdl_helpers.h"
 #include "render.h"
@@ -6,7 +5,7 @@
 
 int main()
 {
-	game_is_running = initialise_window(WINDOW_HEIGHT);
+	game_is_running = initialise_window();
 	initialise_offsets();
 	initialise_colour_map();
 

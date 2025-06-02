@@ -11,7 +11,7 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
 
-int initialise_window(int window_height)
+int initialise_window()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -23,10 +23,10 @@ int initialise_window(int window_height)
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
-        window_height,
+        WINDOW_HEIGHT,
         SDL_WINDOW_BORDERLESS);
 
-    printf("WINDOW HEIGHT %d \n", window_height);
+    printf("WINDOW HEIGHT %d \n", WINDOW_HEIGHT);
     if (!window)
     {
         fprintf(stderr, "Error creating SDL.\n");

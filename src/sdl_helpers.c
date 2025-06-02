@@ -88,8 +88,11 @@ void save_texture(const char *file_name, SDL_Renderer *renderer, SDL_Texture *te
     SDL_SetRenderTarget(renderer, target);
 }
 
+// SDL_Texture *get_image_texture(void) {}
+
 void handle_save_image(void)
 {
+    // SDL_Texture *texture = get_image_texture();
     save_texture("./output.png", renderer, texture);
     printf("Saved image");
 }

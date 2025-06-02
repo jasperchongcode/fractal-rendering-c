@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 // extern const int WINDOW_HEIGHT;
-extern int game_is_running;
+extern int window_is_running;
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;

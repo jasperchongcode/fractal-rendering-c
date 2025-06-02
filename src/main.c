@@ -3,22 +3,23 @@
 #include "render.h"
 #include "colour.h"
 
-int main()
+void setup(void)
 {
-	game_is_running = initialise_window();
+	window_is_running = initialise_window();
 	initialise_offsets();
 	initialise_colour_map();
-
 	render_fractal();
+}
 
-	while (game_is_running)
+int main()
+{
+	setup();
+
+	while (window_is_running)
 	{
 		process_input();
-		// update();
-		// render();
 	}
 
 	destroy_window();
-
 	return 0;
 }

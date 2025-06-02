@@ -5,7 +5,7 @@
 #include "./sdl_helpers.h"
 #include "fractal.h"
 
-int game_is_running;
+int window_is_running;
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -104,12 +104,12 @@ void process_input(void)
     switch (event.type)
     {
     case SDL_QUIT:
-        game_is_running = FALSE;
+        window_is_running = FALSE;
         break;
     case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_ESCAPE)
         {
-            game_is_running = FALSE;
+            window_is_running = FALSE;
         }
         else if (event.key.keysym.sym == SDLK_s)
         {

@@ -60,5 +60,8 @@ void process_input(void)
             game_is_running = FALSE;
         }
         break;
+    case SDL_MOUSEMOTION:
+        // printf("(%d, %d)", event.motion.x, event.motion.y);
+        break;
     }
 }

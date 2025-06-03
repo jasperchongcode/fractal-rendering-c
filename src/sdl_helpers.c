@@ -99,10 +99,9 @@ void handle_mouse_move(int x, int y)
 
 void handle_save_image(void)
 {
-    // SDL_Texture *texture = get_image_texture();
-    render_fractal_image(200, 200);
-    // save_texture("./output.png", renderer, image_texture);
-    printf("Saved image");
+    // Calculate proportional image height (or could hard code it if wanted)
+    int image_height = (int)(((Y_MAX - Y_MIN) / (X_MAX - X_MIN)) * IMAGE_WIDTH);
+    render_save_fractal("screenshot.png", IMAGE_WIDTH, image_height);
 }
 
 void process_input(void)

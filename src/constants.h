@@ -13,3 +13,6 @@
 
 #define MAX_STEPS 100
 #define SAMPLE_GRID_WIDTH 2 // makes a grid 2 high and 2 wide for sampling each pixel
+
+#define IMAGE_WIDTH 3840
+#define IMAGE_SAMPLE_GRID_WIDTH 2

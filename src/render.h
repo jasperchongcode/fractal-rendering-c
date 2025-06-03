@@ -9,6 +9,6 @@ extern float offsets_y[SAMPLE_GRID_WIDTH];
 
 void render_fractal(void);
 void initialise_offsets(void);
-void render_fractal_image(int, int);
+void render_save_fractal(char *, int, int);
 
 #endif

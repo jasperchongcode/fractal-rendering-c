@@ -18,6 +18,12 @@ int initialise_window()
         fprintf(stderr, "Error initialising SDL.\n");
         return FALSE;
     }
+    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) == 0)
+    {
+        fprintf(stderr, "Error initialising IMG.\n");
+        return FALSE;
+    }
+
     window = SDL_CreateWindow(
         NULL,
         SDL_WINDOWPOS_CENTERED,
@@ -52,6 +58,7 @@ void destroy_window()
     // Done in reverse order to init
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    IMG_Quit();
     SDL_Quit();
 }
 
@@ -75,25 +82,26 @@ void handle_mouse_move(int x, int y)
 }
 
 // code taken from https://stackoverflow.com/questions/34255820/save-sdl-texture-to-file
-void save_texture(const char *file_name, SDL_Renderer *renderer, SDL_Texture *texture)
-{
-    SDL_Texture *target = SDL_GetRenderTarget(renderer);
-    SDL_SetRenderTarget(renderer, texture);
-    int width, height;
-    SDL_QueryTexture(texture, NULL, NULL, &width, &height);
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
-    SDL_RenderReadPixels(renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
-    IMG_SavePNG(surface, file_name);
-    SDL_FreeSurface(surface);
-    SDL_SetRenderTarget(renderer, target);
-}
+// void save_texture(const char *file_name, SDL_Renderer *renderer, SDL_Texture *texture)
+// {
+//     SDL_Texture *target = SDL_GetRenderTarget(renderer);
+//     SDL_SetRenderTarget(renderer, texture);
+//     int width, height;
+//     SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+//     SDL_Surface *surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+//     SDL_RenderReadPixels(renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+//     IMG_SavePNG(surface, file_name);
+//     SDL_FreeSurface(surface);
+//     SDL_SetRenderTarget(renderer, target);
+// }
 
 // SDL_Texture *get_image_texture(void) {}
 
 void handle_save_image(void)
 {
     // SDL_Texture *texture = get_image_texture();
-    save_texture("./output.png", renderer, texture);
+    render_fractal_image(200, 200);
+    // save_texture("./output.png", renderer, image_texture);
     printf("Saved image");
 }
 

@@ -56,7 +56,9 @@ double average(float *arr, int length)
 }
 
 ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
+
 {
+
     float smoothed[num_results];
     for (int i = 0; i < num_results; i++)
     {

@@ -4,6 +4,7 @@
 #include "render.h"
 #include "./sdl_helpers.h"
 #include "fractal.h"
+#include "colour.h"
 
 int window_is_running;
 
@@ -104,6 +105,13 @@ void handle_save_image(void)
     render_save_fractal("screenshot.png", IMAGE_WIDTH, image_height);
 }
 
+void handle_change_colour_theme(void)
+{
+
+    // Change the colour theme
+    colour_theme_index = (colour_theme_index + 1) % NUM_COLOUR_THEMES;
+    initialise_colour_map();
+}
 void process_input(void)
 {
     SDL_Event event;
@@ -114,14 +122,32 @@ void process_input(void)
         window_is_running = FALSE;
         break;
     case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_ESCAPE)
+        switch (event.key.keysym.sym)
         {
+        case SDLK_ESCAPE:
             window_is_running = FALSE;
-        }
-        else if (event.key.keysym.sym == SDLK_s)
-        {
+            break;
+        case SDLK_s:
             handle_save_image();
+            break;
+        case SDLK_f:
+            toggle_fill_colour();
+            break;
+
+        case SDLK_t:
+            // handle toggling colour themese
+            handle_change_colour_theme();
+            break;
         }
+        // if (event.key.keysym.sym == SDLK_ESCAPE)
+        // {
+        //     window_is_running = FALSE;
+        // }
+        // else if (event.key.keysym.sym == SDLK_s)
+        // {
+        //     handle_save_image();
+        // }
+
         break;
     case SDL_MOUSEMOTION:
         // printf("(%d, %d)", event.motion.x, event.motion.y);

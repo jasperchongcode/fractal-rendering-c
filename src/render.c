@@ -77,7 +77,7 @@ void render_fractal(void)
     SDL_UpdateTexture(texture, NULL, pixels, WINDOW_WIDTH * sizeof(uint32_t));
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer); // swap buffers
-    printf("RENDERED NEW FRACTAL\n");
+    // printf("RENDERED NEW FRACTAL\n");
 }
 
 void render_save_fractal(char *filename, int window_width, int window_height)

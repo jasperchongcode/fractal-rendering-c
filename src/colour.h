@@ -11,8 +11,13 @@ typedef struct
 } ColourRGBA;
 
 #define COLOUR_MAP_LENGTH 1000
+#define NUM_COLOUR_THEMES 8
 
 extern ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
+
+extern uint8_t colour_theme_index;
+
+void toggle_fill_colour(void);
 
 void initialise_colour_map(void);
 

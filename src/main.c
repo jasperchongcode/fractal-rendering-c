@@ -15,6 +15,8 @@ int main()
 {
 	setup();
 
+	printf("Welcome to the Fractal Renderer!\n");
+	printf("Keybinds:\n * esc - close the program\n * s - take a high quality screenshot\n * f - toggle the 'in the set colour' between black and the natural progression (black is sometimes poor for photos)\n");
 	while (window_is_running)
 	{
 		process_input();

@@ -79,7 +79,7 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
         // if it is fully in the set, return black:
         ColourRGBA colour;
         colour.r = 0;
-        colour.g = 0;
+        colour.g = 255;
         colour.b = 0;
         colour.a = 255;
         return colour;

@@ -9,16 +9,6 @@ ColourRGBA fill_colour = {0, 0, 0, 255};
 uint8_t use_fill_colour = 1; // boolean
 uint8_t colour_theme_index = 0;
 
-// void initialise_colour_map()
-// {
-//     for (int i = 0; i < COLOUR_MAP_LENGTH; i++)
-//     {
-//         COLOUR_MAP[i].r = i % 256;
-//         COLOUR_MAP[i].g = (i * 2) % 256;
-//         COLOUR_MAP[i].b = (i * 4) % 256;
-//         COLOUR_MAP[i].a = 255;
-//     }
-// }
 void initialise_colour_map()
 {
 
@@ -47,21 +37,21 @@ void initialise_colour_map()
             red = (Uint8)(brightness * 255);
             break;
         case 3: // Yellow
-            red = (Uint8)(brightness * 255);
-            green = (Uint8)(brightness * 255);
+            red = green = (Uint8)(brightness * 255);
+            // green = (Uint8)(brightness * 255);
             break;
         case 4: // pink
-            red = (Uint8)(brightness * 255);
-            blue = (Uint8)(brightness * 255);
+            red = blue = (Uint8)(brightness * 255);
+            // blue = (Uint8)(brightness * 255);
             break;
         case 5: // cyan
-            green = (Uint8)(brightness * 255);
-            blue = (Uint8)(brightness * 255);
+            green = blue = (Uint8)(brightness * 255);
+            // blue = (Uint8)(brightness * 255);
             break;
         case 6: // black -> white
-            red = (Uint8)(brightness * 255);
-            green = (Uint8)(brightness * 255);
-            blue = (Uint8)(brightness * 255);
+            red = green = blue = (Uint8)(brightness * 255);
+            // green = (Uint8)(brightness * 255);
+            // blue = (Uint8)(brightness * 255);
             break;
         case 7: // amber
             brightness = brightness / 3;
@@ -135,12 +125,7 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
     free(smoothed);
     if (index >= COLOUR_MAP_LENGTH)
     {
-        // if it is fully in the set, return black:
-        // ColourRGBA colour;
-        // colour.r = 0;
-        // colour.g = 255;
-        // colour.b = 0;
-        // colour.a = 255;
+        // if it is fully in the set
         if (use_fill_colour)
         {
             return fill_colour;
@@ -154,27 +139,4 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
     {
         return COLOUR_MAP[index];
     }
-    // return COLOUR_MAP[(int)(((float)escapeResult.steps / MAX_STEPS) * COLOUR_MAP_LENGTH)];
-
-    // int escape_steps = escapeResult.steps;
-
-    // Linear from 0 to 255
-    // Uint8 val = (Uint8)((escape_steps / (float)MAX_STEPS) * 255);
-    // attempt to use log
-    // Uint8 val;
-    // if (escape_steps == 0)
-    // {
-    // 	val = 0;
-    // }
-    // else
-    // {
-    // 	val = (Uint8)((logf((float)escape_steps) / logf((float)MAX_STEPS)) * 255.0f);
-    // }
-
-    // colour.r = val;
-    // colour.g = val;
-    // colour.b = val;
-    // colour.a = 255;
-
-    // return colour;
 }

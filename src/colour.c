@@ -7,7 +7,7 @@
 ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 ColourRGBA fill_colour = {0, 0, 0, 255};
 uint8_t use_fill_colour = 1; // boolean
-uint8_t colour_theme_index = 7;
+uint8_t colour_theme_index = 0;
 
 // void initialise_colour_map()
 // {
@@ -68,11 +68,11 @@ void initialise_colour_map()
             red = (Uint8)(2 * brightness * 255);
             green = (Uint8)(brightness * 255);
             break;
-            // case 7: // white -> black
-            //         // float inverted = 1.0f - brightness;
-            //         // red = green = blue = (Uint8)(inverted * 255);
-            //         // for some reason this is breaking
-            //     break;
+        case 8: // white -> black
+            // float inverted = 1.0f - brightness;
+            red = green = blue = (Uint8)((1.0f - brightness) * 255);
+            // for some reason this is breaking
+            break;
         }
         COLOUR_MAP[i].r = red;
         COLOUR_MAP[i].g = green;
@@ -108,7 +108,17 @@ void toggle_fill_colour(void)
 ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
 
 {
-    float smoothed[num_results];
+    // float smoothed[num_results];
+
+    float *smoothed = malloc(num_results * sizeof(float));
+    // Always check if malloc was successful
+    if (smoothed == NULL)
+    {
+        fprintf(stderr, "Failed to allocate memory for smoothed array\n");
+        // Return a default/error colour, e.g., black
+        return (ColourRGBA){0, 0, 0, 255};
+    }
+
     for (int i = 0; i < num_results; i++)
     {
         if (escapeResults[i].steps == MAX_STEPS)
@@ -122,7 +132,7 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
     }
 
     int index = (int)(average(smoothed, num_results) * COLOUR_MAP_LENGTH);
-
+    free(smoothed);
     if (index >= COLOUR_MAP_LENGTH)
     {
         // if it is fully in the set, return black:

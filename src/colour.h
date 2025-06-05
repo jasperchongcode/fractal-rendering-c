@@ -11,7 +11,7 @@ typedef struct
 } ColourRGBA;
 
 #define COLOUR_MAP_LENGTH 1000
-#define NUM_COLOUR_THEMES 8
+#define NUM_COLOUR_THEMES 9
 
 extern ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 

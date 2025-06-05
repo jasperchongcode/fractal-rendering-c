@@ -12,11 +12,11 @@ Complex C = {1, 1};
 
 uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
 
-// offsets for multisampling
-float offsets_x[SAMPLE_GRID_WIDTH];
-float offsets_y[SAMPLE_GRID_WIDTH];
-
 int samples_per_pixel = SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH;
+
+// offsets for multisampling
+float offsets_x[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
+float offsets_y[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
 
 void initialise_offsets(void)
 {
@@ -41,36 +41,48 @@ void render_fractal(void)
     float pixel_width = (X_MAX - X_MIN) / WINDOW_WIDTH;
     float pixel_height = (Y_MAX - Y_MIN) / WINDOW_HEIGHT;
 
-#pragma omp parallel for schedule(dynamic, 1)
-    for (int r = 0; r < WINDOW_HEIGHT; r++)
+#pragma omp parallel
     {
-        for (int c = 0; c < WINDOW_WIDTH; c++)
+        // allocate memory for escapeResults for each thread
+        EscapeResult *escapeResults = malloc(samples_per_pixel * sizeof(EscapeResult));
+        if (!escapeResults)
         {
-            // Number of samples per pixel, e.g., 4 (2x2 grid)
-
-            EscapeResult escapeResults[samples_per_pixel];
-
-            // Sample positions within the pixel, offsets normalized between 0 and 1
-
-            for (int s = 0; s < samples_per_pixel; s++)
-            {
-                Complex point;
-                // Base coordinates for this pixel (top-left corner)
-                float base_re = X_MIN + c * pixel_width;
-                float base_im = Y_MIN + r * pixel_height;
-
-                // Add sample offsets scaled by pixel dimensions
-                point.re = base_re + offsets_x[s] * pixel_width;
-                point.im = base_im + offsets_y[s] * pixel_height;
-
-                escapeResults[s] = verify_in_julia(point, C);
-            }
-
-            ColourRGBA pixel_colour = get_pixel_colour(escapeResults, samples_per_pixel);
-
-            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
-            pixels[r * WINDOW_WIDTH + c] = flat_colour;
+            printf("Error allocating memory for escapeResults");
+            exit(1);
         }
+
+#pragma omp for schedule(dynamic, 1)
+        for (int r = 0; r < WINDOW_HEIGHT; r++)
+        {
+            for (int c = 0; c < WINDOW_WIDTH; c++)
+            {
+                // Number of samples per pixel, e.g., 4 (2x2 grid)
+
+                // EscapeResult escapeResults[samples_per_pixel];
+
+                // Sample positions within the pixel, offsets normalized between 0 and 1
+
+                for (int s = 0; s < samples_per_pixel; s++)
+                {
+                    Complex point;
+                    // Base coordinates for this pixel (top-left corner)
+                    float base_re = X_MIN + c * pixel_width;
+                    float base_im = Y_MIN + r * pixel_height;
+
+                    // Add sample offsets scaled by pixel dimensions
+                    point.re = base_re + offsets_x[s] * pixel_width;
+                    point.im = base_im + offsets_y[s] * pixel_height;
+
+                    escapeResults[s] = verify_in_julia(point, C);
+                }
+
+                ColourRGBA pixel_colour = get_pixel_colour(escapeResults, samples_per_pixel);
+
+                uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+                pixels[r * WINDOW_WIDTH + c] = flat_colour;
+            }
+        }
+        free(escapeResults);
     }
 
     // swap to buffer
@@ -111,34 +123,46 @@ void render_save_fractal(char *filename, int window_width, int window_height)
     float pixel_width = (X_MAX - X_MIN) / window_width;
     float pixel_height = (Y_MAX - Y_MIN) / window_height;
 
-#pragma omp parallel for schedule(dynamic, 1)
-    for (int r = 0; r < window_height; r++)
+#pragma omp parallel
     {
-        for (int c = 0; c < window_width; c++)
+        // allocate for each thread
+        EscapeResult *escapeResults = malloc(image_samples_per_pixel * sizeof(EscapeResult));
+        if (!escapeResults)
         {
-            // List of results to average for multisampling
-            EscapeResult escapeResults[image_samples_per_pixel];
-
-            for (int s = 0; s < image_samples_per_pixel; s++)
-            {
-                // Get the complex coords of this point
-                Complex point;
-                // Base coordinates for this pixel (top-left corner)
-                float base_re = X_MIN + c * pixel_width;
-                float base_im = Y_MIN + r * pixel_height;
-
-                // Add sample offsets scaled by pixel dimensions
-                point.re = base_re + image_offsets_x[s] * pixel_width;
-                point.im = base_im + image_offsets_y[s] * pixel_height;
-                // Calculate escape results
-                escapeResults[s] = verify_in_julia(point, C);
-            }
-            // get the pixel colour from the average of the multisampling
-            ColourRGBA pixel_colour = get_pixel_colour(escapeResults, image_samples_per_pixel);
-            // store in pixel buffer as uint32_t
-            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
-            pixel_buffer[r * window_width + c] = flat_colour;
+            printf("Error allocating image escapeResults");
+            exit(1);
         }
+
+#pragma omp for schedule(dynamic, 1)
+        for (int r = 0; r < window_height; r++)
+        {
+            for (int c = 0; c < window_width; c++)
+            {
+                // List of results to average for multisampling
+                // EscapeResult escapeResults[image_samples_per_pixel];
+
+                for (int s = 0; s < image_samples_per_pixel; s++)
+                {
+                    // Get the complex coords of this point
+                    Complex point;
+                    // Base coordinates for this pixel (top-left corner)
+                    float base_re = X_MIN + c * pixel_width;
+                    float base_im = Y_MIN + r * pixel_height;
+
+                    // Add sample offsets scaled by pixel dimensions
+                    point.re = base_re + image_offsets_x[s] * pixel_width;
+                    point.im = base_im + image_offsets_y[s] * pixel_height;
+                    // Calculate escape results
+                    escapeResults[s] = verify_in_julia(point, C);
+                }
+                // get the pixel colour from the average of the multisampling
+                ColourRGBA pixel_colour = get_pixel_colour(escapeResults, image_samples_per_pixel);
+                // store in pixel buffer as uint32_t
+                uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+                pixel_buffer[r * window_width + c] = flat_colour;
+            }
+        }
+        free(escapeResults);
     }
     // Create a surface for image creation
     SDL_Surface *surface = SDL_CreateRGBSurfaceWithFormatFrom(

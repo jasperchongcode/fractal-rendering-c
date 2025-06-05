@@ -2,6 +2,7 @@
 #define COLOUR_H
 
 #include "fractal.h"
+#include <stdint.h>
 typedef struct
 {
     uint8_t r;

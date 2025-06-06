@@ -2,7 +2,7 @@
 #define FALSE 0
 #define TRUE 1
 #define WINDOW_WIDTH 1200
-// #define WINDOW_HEIGHT 600
+
 // Have 16:9 aspect ratio
 #define DEFAULT_X_MIN -(32.0f / 9)
 #define DEFAULT_X_MAX (32.0f / 9)
@@ -16,3 +16,5 @@
 
 #define IMAGE_WIDTH 3840
 #define IMAGE_SAMPLE_GRID_WIDTH 4
+
+#define ZOOM_FACTOR 1.5f

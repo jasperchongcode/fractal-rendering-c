@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include "sdl_helpers.h"
 
-float ZOOM_FACTOR = 2;
+// float ZOOM_FACTOR = 2;
 
 uint8_t change_fractal_with_mouse = 1;
 

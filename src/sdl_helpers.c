@@ -113,8 +113,14 @@ void process_input(void)
             handle_reset_view();
             break;
         case SDLK_n:
-            // "next" fractal
-            handle_toggle_fractal();
+            // cycle to next fractal
+            handle_toggle_fractal(-1);
+            break;
+        case SDLK_1:
+            handle_toggle_fractal(0);
+            break;
+        case SDLK_2:
+            handle_toggle_fractal(1);
             break;
         }
 

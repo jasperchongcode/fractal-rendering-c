@@ -15,6 +15,7 @@ void handle_zoom(int zoom_in);
 
 void handle_reset_view(void);
 
-void handle_toggle_fractal(void);
+// can put -1 to cycle
+void handle_toggle_fractal(int);
 
 #endif

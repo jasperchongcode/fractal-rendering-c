@@ -64,6 +64,11 @@ void destroy_window()
     SDL_Quit();
 }
 
+void move_mouse_centre(void)
+{
+    SDL_WarpMouseInWindow(window, (int)(WINDOW_WIDTH / 2), (int)(WINDOW_HEIGHT / 2));
+}
+
 void process_input(void)
 {
     SDL_Event event;
@@ -96,24 +101,18 @@ void process_input(void)
         case SDLK_i:
             // Handle zoom in
             handle_zoom(1);
+            move_mouse_centre();
             break;
         case SDLK_o:
             // handle zoom out
             handle_zoom(0);
+            move_mouse_centre();
             break;
         case SDLK_r:
             // Handle reset view window
             handle_reset_view();
             break;
         }
-        // if (event.key.keysym.sym == SDLK_ESCAPE)
-        // {
-        //     window_is_running = FALSE;
-        // }
-        // else if (event.key.keysym.sym == SDLK_s)
-        // {
-        //     handle_save_image();
-        // }
 
         break;
     case SDL_MOUSEMOTION:

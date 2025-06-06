@@ -15,8 +15,12 @@ int main()
 {
 	setup();
 
-	printf("Welcome to the Fractal Renderer!\n");
-	printf("Keybinds:\n * esc - close the program\n * s - take a high quality screenshot\n * f - toggle the 'in the set colour' between black and the natural progression (black is sometimes poor for photos)\n");
+	printf("Keybinds:\n");
+	printf(" * esc - close the program\n");
+	printf(" * s - take a high quality screenshot\n");
+	printf(" * f - toggle the 'in the set colour' between black and the natural progression (black is sometimes poor for photos)\n");
+	printf(" * m - toggle using the mouse to change the fractal");
+
 	while (window_is_running)
 	{
 		process_input();

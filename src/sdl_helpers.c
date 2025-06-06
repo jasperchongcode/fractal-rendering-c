@@ -83,13 +83,15 @@ void process_input(void)
             handle_save_image();
             break;
         case SDLK_f:
-            toggle_fill_colour();
+            handle_toggle_fill_colour();
             break;
-
         case SDLK_t:
             // handle toggling colour themese
             handle_change_colour_theme();
             break;
+        case SDLK_m:
+            // toggle using mouse to change the julia fractal
+            handle_toggle_change_fractal_with_mouse();
         }
         // if (event.key.keysym.sym == SDLK_ESCAPE)
         // {

@@ -8,7 +8,10 @@
 #include <omp.h>
 
 Complex C = {1, 1};
-// memory buffer
+float x_min = DEFAULT_X_MIN;
+float x_max = DEFAULT_X_MAX;
+float y_min = DEFAULT_Y_MIN;
+float y_max = DEFAULT_Y_MAX;
 
 uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
 
@@ -38,8 +41,8 @@ void render_fractal(void)
     // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
     SDL_RenderClear(renderer);
 
-    float pixel_width = (X_MAX - X_MIN) / WINDOW_WIDTH;
-    float pixel_height = (Y_MAX - Y_MIN) / WINDOW_HEIGHT;
+    float pixel_width = (x_max - x_min) / WINDOW_WIDTH;
+    float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
 
 #pragma omp parallel
     {
@@ -66,8 +69,8 @@ void render_fractal(void)
                 {
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    float base_re = X_MIN + c * pixel_width;
-                    float base_im = Y_MIN + r * pixel_height;
+                    float base_re = x_min + c * pixel_width;
+                    float base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + offsets_x[s] * pixel_width;
@@ -120,8 +123,8 @@ void render_save_fractal(char *filename, int window_width, int window_height)
         }
     }
     // Constants for finding representative points
-    float pixel_width = (X_MAX - X_MIN) / window_width;
-    float pixel_height = (Y_MAX - Y_MIN) / window_height;
+    float pixel_width = (x_max - x_min) / window_width;
+    float pixel_height = (y_max - y_min) / window_height;
 
 #pragma omp parallel
     {
@@ -146,8 +149,8 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                     // Get the complex coords of this point
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    float base_re = X_MIN + c * pixel_width;
-                    float base_im = Y_MIN + r * pixel_height;
+                    float base_re = x_min + c * pixel_width;
+                    float base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + image_offsets_x[s] * pixel_width;

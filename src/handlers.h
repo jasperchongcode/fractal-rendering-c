@@ -7,4 +7,8 @@ void handle_save_image(void);
 
 void handle_change_colour_theme(void);
 
+void handle_toggle_change_fractal_with_mouse(void);
+
+void handle_toggle_fill_colour(void);
+
 #endif

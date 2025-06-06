@@ -70,12 +70,12 @@ void initialise_colour_map()
     }
 }
 
-float get_renormalised_count(int steps, double final_z_re, double final_z_im)
+double get_renormalised_count(int steps, double final_z_re, double final_z_im)
 {
-    return (float)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
+    return (double)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
 }
 
-double average(float *arr, int length)
+double average(double *arr, int length)
 {
     if (length == 0)
         return 0.0; // Avoid division by zero
@@ -94,17 +94,53 @@ void toggle_fill_colour(void)
     use_fill_colour = !use_fill_colour;
 }
 
-ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
+ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised_escape_step)
 
 {
 
-    float *smoothed = malloc(num_results * sizeof(float));
+    if (min_normalised_escape_step == 1 || normalised_escape_step == 1)
+    {
+        if (use_fill_colour)
+        {
+            return fill_colour;
+        }
+        else
+        {
+            return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
+        }
+    }
+
+    int index = (int)(((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)) * COLOUR_MAP_LENGTH);
+
+    // if (index >= COLOUR_MAP_LENGTH)
+    // {
+    //     // if it is fully in the set
+    //     if (use_fill_colour)
+    //     {
+    //         return fill_colour;
+    //     }
+    //     else
+    //     {
+    //         return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
+    //     }
+    // }
+    // else
+    // {
+    return COLOUR_MAP[index];
+    // }
+}
+
+double get_normalised_escape_step(EscapeResult *escapeResults, int num_results)
+
+{
+
+    double *smoothed = malloc(num_results * sizeof(double));
     // Always check if malloc was successful
     if (smoothed == NULL)
     {
         fprintf(stderr, "Failed to allocate memory for smoothed array\n");
         // Return a default/error colour, e.g., black
-        return (ColourRGBA){0, 0, 0, 255};
+        return 1.0f;
     }
 
     for (int i = 0; i < num_results; i++)
@@ -119,22 +155,12 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
         }
     }
 
-    int index = (int)(average(smoothed, num_results) * COLOUR_MAP_LENGTH);
+    double normalised_escape_step = average(smoothed, num_results);
     free(smoothed);
-    if (index >= COLOUR_MAP_LENGTH)
+
+    if (normalised_escape_step > 1)
     {
-        // if it is fully in the set
-        if (use_fill_colour)
-        {
-            return fill_colour;
-        }
-        else
-        {
-            return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
-        }
+        return 1.0f;
     }
-    else
-    {
-        return COLOUR_MAP[index];
-    }
+    return normalised_escape_step;
 }

@@ -94,10 +94,9 @@ void toggle_fill_colour(void)
     use_fill_colour = !use_fill_colour;
 }
 
+// returns a colourrgba object after shifting the normalised escape step by min
 ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised_escape_step)
-
 {
-
     if (min_normalised_escape_step == 1 || normalised_escape_step == 1)
     {
         if (use_fill_colour)
@@ -112,28 +111,12 @@ ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised
 
     int index = (int)(((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)) * COLOUR_MAP_LENGTH);
 
-    // if (index >= COLOUR_MAP_LENGTH)
-    // {
-    //     // if it is fully in the set
-    //     if (use_fill_colour)
-    //     {
-    //         return fill_colour;
-    //     }
-    //     else
-    //     {
-    //         return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
-    //     }
-    // }
-    // else
-    // {
     return COLOUR_MAP[index];
-    // }
 }
 
+// gets the non-discrete average escape step from all of provided escapeResults
 double get_normalised_escape_step(EscapeResult *escapeResults, int num_results)
-
 {
-
     double *smoothed = malloc(num_results * sizeof(double));
     // Always check if malloc was successful
     if (smoothed == NULL)

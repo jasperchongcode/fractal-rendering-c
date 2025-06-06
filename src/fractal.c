@@ -3,10 +3,6 @@
 #include "fractal.h"
 #include "constants.h"
 
-// float get_distance_origin(float re, float im)
-// {
-//     return sqrt(re * re + im * im);
-// }
 int fractal_index = 0;
 
 /**
@@ -16,8 +12,8 @@ EscapeResult verify_in_mandelbrot(Complex point)
 {
     // Defined to escape if at any point it leaves a circle of radius 2
 
-    float z_re = 0;
-    float z_im = 0;
+    double z_re = 0;
+    double z_im = 0;
 
     for (int i = 0; i < MAX_STEPS; i++)
     {
@@ -33,7 +29,7 @@ EscapeResult verify_in_mandelbrot(Complex point)
         }
         // Otherwise iterate re and im
         // (a+bi)^2 = a^2 +2abi -b^2k
-        float z_re_prev = z_re;
+        double z_re_prev = z_re;
         z_re = z_re * z_re - z_im * z_im + point.re; // re(z)^2 -im(z)^2 + re(c)
         z_im = 2 * z_re_prev * z_im + point.im;      // 2*re(z)*im(z) + im(c)
     }
@@ -49,8 +45,8 @@ EscapeResult verify_in_julia(Complex point, Complex c)
 {
     // Defined to escape if at any point it leaves a circle of radius 2
 
-    float z_re = point.re;
-    float z_im = point.im;
+    double z_re = point.re;
+    double z_im = point.im;
 
     for (int i = 0; i < MAX_STEPS; i++)
     {
@@ -66,7 +62,7 @@ EscapeResult verify_in_julia(Complex point, Complex c)
         }
         // Otherwise iterate re and im
         // (a+bi)^2 = a^2 +2abi -b^2k
-        float z_re_prev = z_re;
+        double z_re_prev = z_re;
         z_re = z_re * z_re - z_im * z_im + c.re; // re(z)^2 -im(z)^2 + re(c)
         z_im = 2 * z_re_prev * z_im + c.im;      // 2*re(z)*im(z) + im(c)
     }

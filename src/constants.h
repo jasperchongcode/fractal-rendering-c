@@ -4,10 +4,10 @@
 #define WINDOW_WIDTH 1200
 
 // Have 16:9 aspect ratio
-#define DEFAULT_X_MIN -(32.0f / 9)
-#define DEFAULT_X_MAX (32.0f / 9)
-#define DEFAULT_Y_MIN -2.0f
-#define DEFAULT_Y_MAX 2.0f
+#define DEFAULT_X_MIN -(32.0 / 9)
+#define DEFAULT_X_MAX (32.0 / 9)
+#define DEFAULT_Y_MIN -2.0
+#define DEFAULT_Y_MAX 2.0
 
 #define WINDOW_HEIGHT ((int)(((DEFAULT_Y_MAX - DEFAULT_Y_MIN) / (DEFAULT_X_MAX - DEFAULT_X_MIN)) * WINDOW_WIDTH))
 

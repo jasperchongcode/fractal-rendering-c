@@ -5,14 +5,14 @@
 typedef struct
 {
     int steps;
-    float z_re;
-    float z_im;
+    double z_re;
+    double z_im;
 } EscapeResult;
 
 typedef struct
 {
-    float re;
-    float im;
+    double re;
+    double im;
 } Complex;
 
 extern int fractal_index;

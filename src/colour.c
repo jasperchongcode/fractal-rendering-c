@@ -59,7 +59,6 @@ void initialise_colour_map()
             green = (Uint8)(brightness * 255);
             break;
         case 8: // white -> black
-            // float inverted = 1.0f - brightness;
             red = green = blue = (Uint8)((1.0f - brightness) * 255);
             // for some reason this is breaking
             break;
@@ -71,7 +70,7 @@ void initialise_colour_map()
     }
 }
 
-float get_renormalised_count(int steps, float final_z_re, float final_z_im)
+float get_renormalised_count(int steps, double final_z_re, double final_z_im)
 {
     return (float)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
 }
@@ -81,7 +80,7 @@ double average(float *arr, int length)
     if (length == 0)
         return 0.0; // Avoid division by zero
 
-    float sum = 0; // Use long long to avoid overflow for large sums
+    double sum = 0; // Use long long to avoid overflow for large sums
     for (int i = 0; i < length; i++)
     {
         sum += arr[i];
@@ -98,7 +97,6 @@ void toggle_fill_colour(void)
 ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
 
 {
-    // float smoothed[num_results];
 
     float *smoothed = malloc(num_results * sizeof(float));
     // Always check if malloc was successful

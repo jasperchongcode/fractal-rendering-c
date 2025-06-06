@@ -14,8 +14,8 @@ int mouse_y = 0;
 
 Complex get_point_from_mouse(int x, int y)
 {
-    float normalised_x = ((float)x) / WINDOW_WIDTH;
-    float normalised_y = ((float)y) / WINDOW_HEIGHT;
+    double normalised_x = ((double)x) / WINDOW_WIDTH;
+    double normalised_y = ((double)y) / WINDOW_HEIGHT;
 
     Complex new_c;
     new_c.re = normalised_x * x_max + (1 - normalised_x) * x_min;
@@ -53,15 +53,15 @@ void handle_zoom(int zoom_in)
         scaling_factor = 1 / ZOOM_FACTOR;
     }
 
-    float temp_x_min = x_min;
-    float temp_x_max = x_max;
-    float temp_y_min = y_min;
-    float temp_y_max = y_max;
+    double temp_x_min = x_min;
+    double temp_x_max = x_max;
+    double temp_y_min = y_min;
+    double temp_y_max = y_max;
 
     // "shift" the main window to the origin by subtracting the centre point (move the centre point of existing window to origin)
     // First find the centre of the existing window
-    float centre_x = (x_max + x_min) / 2;
-    float centre_y = (y_max + y_min) / 2;
+    double centre_x = (x_max + x_min) / 2;
+    double centre_y = (y_max + y_min) / 2;
     // Then shift the existing window to the centre
     temp_x_max -= centre_x;
     temp_x_min -= centre_x;

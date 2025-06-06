@@ -8,18 +8,18 @@
 #include <omp.h>
 
 Complex C = {1, 1};
-float x_min = DEFAULT_X_MIN;
-float x_max = DEFAULT_X_MAX;
-float y_min = DEFAULT_Y_MIN;
-float y_max = DEFAULT_Y_MAX;
+double x_min = DEFAULT_X_MIN;
+double x_max = DEFAULT_X_MAX;
+double y_min = DEFAULT_Y_MIN;
+double y_max = DEFAULT_Y_MAX;
 
 uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
 
 int samples_per_pixel = SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH;
 
 // offsets for multisampling
-float offsets_x[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
-float offsets_y[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
+double offsets_x[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
+double offsets_y[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
 
 void initialise_offsets(void)
 {
@@ -29,8 +29,8 @@ void initialise_offsets(void)
     {
         for (int x = 0; x < SAMPLE_GRID_WIDTH; x++)
         {
-            offsets_x[index] = (x + 0.5f) / SAMPLE_GRID_WIDTH;
-            offsets_y[index] = (y + 0.5f) / SAMPLE_GRID_WIDTH;
+            offsets_x[index] = (x + 0.5) / SAMPLE_GRID_WIDTH;
+            offsets_y[index] = (y + 0.5) / SAMPLE_GRID_WIDTH;
             index++;
         }
     }
@@ -41,8 +41,8 @@ void render_fractal(void)
     // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
     SDL_RenderClear(renderer);
 
-    float pixel_width = (x_max - x_min) / WINDOW_WIDTH;
-    float pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
+    double pixel_width = (x_max - x_min) / WINDOW_WIDTH;
+    double pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
 
 #pragma omp parallel
     {
@@ -69,8 +69,8 @@ void render_fractal(void)
                 {
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    float base_re = x_min + c * pixel_width;
-                    float base_im = y_min + r * pixel_height;
+                    double base_re = x_min + c * pixel_width;
+                    double base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + offsets_x[s] * pixel_width;
@@ -108,8 +108,8 @@ void render_save_fractal(char *filename, int window_width, int window_height)
     int image_samples_per_pixel = IMAGE_SAMPLE_GRID_WIDTH * IMAGE_SAMPLE_GRID_WIDTH;
 
     // offsets for multisampling
-    float image_offsets_x[image_samples_per_pixel];
-    float image_offsets_y[image_samples_per_pixel];
+    double image_offsets_x[image_samples_per_pixel];
+    double image_offsets_y[image_samples_per_pixel];
 
     // initialise the offsets
     int index = 0;
@@ -117,14 +117,14 @@ void render_save_fractal(char *filename, int window_width, int window_height)
     {
         for (int x = 0; x < IMAGE_SAMPLE_GRID_WIDTH; x++)
         {
-            image_offsets_x[index] = (x + 0.5f) / IMAGE_SAMPLE_GRID_WIDTH;
-            image_offsets_y[index] = (y + 0.5f) / IMAGE_SAMPLE_GRID_WIDTH;
+            image_offsets_x[index] = (x + 0.5) / IMAGE_SAMPLE_GRID_WIDTH;
+            image_offsets_y[index] = (y + 0.5) / IMAGE_SAMPLE_GRID_WIDTH;
             index++;
         }
     }
     // Constants for finding representative points
-    float pixel_width = (x_max - x_min) / window_width;
-    float pixel_height = (y_max - y_min) / window_height;
+    double pixel_width = (x_max - x_min) / window_width;
+    double pixel_height = (y_max - y_min) / window_height;
 
 #pragma omp parallel
     {
@@ -149,8 +149,8 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                     // Get the complex coords of this point
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    float base_re = x_min + c * pixel_width;
-                    float base_im = y_min + r * pixel_height;
+                    double base_re = x_min + c * pixel_width;
+                    double base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + image_offsets_x[s] * pixel_width;

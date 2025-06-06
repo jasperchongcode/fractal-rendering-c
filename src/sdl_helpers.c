@@ -112,6 +112,10 @@ void process_input(void)
             // Handle reset view window
             handle_reset_view();
             break;
+        case SDLK_n:
+            // "next" fractal
+            handle_toggle_fractal();
+            break;
         }
 
         break;

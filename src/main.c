@@ -22,6 +22,7 @@ int main()
 	printf(" * m - toggle using the mouse to change the fractal");
 	printf(" * i - zoom in to mouse location by ZOOM_FACTOR and reset mouse to centre (this also disables using mouse to change fractal)");
 	printf(" * o - same as above but zooms out instead.");
+	printf(" * n - switch to next fractal");
 
 	while (window_is_running)
 	{

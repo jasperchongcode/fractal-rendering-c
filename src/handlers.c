@@ -132,3 +132,12 @@ void handle_toggle_fill_colour(void)
     toggle_fill_colour();
     render_fractal();
 }
+
+void handle_toggle_fractal(void)
+{
+    // dont let fractal change
+    // change_fractal_with_mouse = 0;
+
+    fractal_index = (fractal_index + 1) % NUM_FRACTALS;
+    render_fractal();
+}

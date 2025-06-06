@@ -7,6 +7,7 @@
 // {
 //     return sqrt(re * re + im * im);
 // }
+int fractal_index = 0;
 
 /**
  * returns renormalised count to prevent bands, return -1 if never escapes
@@ -75,4 +76,17 @@ EscapeResult verify_in_julia(Complex point, Complex c)
     output.z_re = z_re;
     output.z_im = z_im;
     return output;
+}
+
+EscapeResult verify_in_fractal(Complex point, Complex C)
+{
+    switch (fractal_index)
+    {
+    case 0:
+        return verify_in_julia(point, C);
+    case 1:
+        return verify_in_mandelbrot(point);
+    }
+    printf("Invalid fractal_index");
+    return (EscapeResult){0, 0, 0};
 }

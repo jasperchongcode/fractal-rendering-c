@@ -76,7 +76,7 @@ void render_fractal(void)
                     point.re = base_re + offsets_x[s] * pixel_width;
                     point.im = base_im + offsets_y[s] * pixel_height;
 
-                    escapeResults[s] = verify_in_julia(point, C);
+                    escapeResults[s] = verify_in_fractal(point, C);
                 }
 
                 ColourRGBA pixel_colour = get_pixel_colour(escapeResults, samples_per_pixel);
@@ -156,7 +156,7 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                     point.re = base_re + image_offsets_x[s] * pixel_width;
                     point.im = base_im + image_offsets_y[s] * pixel_height;
                     // Calculate escape results
-                    escapeResults[s] = verify_in_julia(point, C);
+                    escapeResults[s] = verify_in_fractal(point, C);
                 }
                 // get the pixel colour from the average of the multisampling
                 ColourRGBA pixel_colour = get_pixel_colour(escapeResults, image_samples_per_pixel);

@@ -15,4 +15,6 @@ void handle_zoom(int zoom_in);
 
 void handle_reset_view(void);
 
+void handle_toggle_fractal(void);
+
 #endif

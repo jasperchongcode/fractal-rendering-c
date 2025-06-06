@@ -92,6 +92,19 @@ void process_input(void)
         case SDLK_m:
             // toggle using mouse to change the julia fractal
             handle_toggle_change_fractal_with_mouse();
+            break;
+        case SDLK_i:
+            // Handle zoom in
+            handle_zoom(1);
+            break;
+        case SDLK_o:
+            // handle zoom out
+            handle_zoom(0);
+            break;
+        case SDLK_r:
+            // Handle reset view window
+            handle_reset_view();
+            break;
         }
         // if (event.key.keysym.sym == SDLK_ESCAPE)
         // {

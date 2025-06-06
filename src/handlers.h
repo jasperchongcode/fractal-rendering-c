@@ -11,4 +11,8 @@ void handle_toggle_change_fractal_with_mouse(void);
 
 void handle_toggle_fill_colour(void);
 
+void handle_zoom(int zoom_in);
+
+void handle_reset_view(void);
+
 #endif

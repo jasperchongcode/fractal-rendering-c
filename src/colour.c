@@ -8,6 +8,7 @@ ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 ColourRGBA fill_colour = {0, 0, 0, 255};
 uint8_t use_fill_colour = 1; // boolean
 uint8_t colour_theme_index = 0;
+float exponential_bias = DEFAULT_EXPONENTIAL_BIAS;
 
 void initialise_colour_map()
 {
@@ -70,12 +71,12 @@ void initialise_colour_map()
     }
 }
 
-float get_renormalised_count(int steps, double final_z_re, double final_z_im)
+double get_renormalised_count(int steps, double final_z_re, double final_z_im)
 {
-    return (float)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
+    return (double)(steps) + 1 - (logf((0.5) * logf(final_z_re * final_z_re + final_z_im * final_z_im)) / logf(2));
 }
 
-double average(float *arr, int length)
+double average(double *arr, int length)
 {
     if (length == 0)
         return 0.0; // Avoid division by zero
@@ -94,36 +95,11 @@ void toggle_fill_colour(void)
     use_fill_colour = !use_fill_colour;
 }
 
-ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
-
+// returns a colourrgba object after shifting the normalised escape step by min
+ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised_escape_step)
 {
-
-    float *smoothed = malloc(num_results * sizeof(float));
-    // Always check if malloc was successful
-    if (smoothed == NULL)
+    if (min_normalised_escape_step == 1 || normalised_escape_step == 1)
     {
-        fprintf(stderr, "Failed to allocate memory for smoothed array\n");
-        // Return a default/error colour, e.g., black
-        return (ColourRGBA){0, 0, 0, 255};
-    }
-
-    for (int i = 0; i < num_results; i++)
-    {
-        if (escapeResults[i].steps == MAX_STEPS)
-        {
-            smoothed[i] = 1;
-        }
-        else
-        {
-            smoothed[i] = get_renormalised_count(escapeResults[i].steps, escapeResults[i].z_re, escapeResults[i].z_im) / MAX_STEPS; // between 0 and 1
-        }
-    }
-
-    int index = (int)(average(smoothed, num_results) * COLOUR_MAP_LENGTH);
-    free(smoothed);
-    if (index >= COLOUR_MAP_LENGTH)
-    {
-        // if it is fully in the set
         if (use_fill_colour)
         {
             return fill_colour;
@@ -133,8 +109,45 @@ ColourRGBA get_pixel_colour(EscapeResult *escapeResults, int num_results)
             return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
         }
     }
-    else
+    // linear transform from min value and then apply power
+    double unrounded_index = ((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)); // * COLOUR_MAP_LENGTH
+    unrounded_index = pow(unrounded_index, exponential_bias) * COLOUR_MAP_LENGTH;                                        // Bias it a little darker before returning index                                                   // smoothstep function
+    // unrounded_index = pow(unrounded_index, 0.5);
+    int index = (int)unrounded_index;
+
+    return COLOUR_MAP[index];
+}
+
+// gets the non-discrete average escape step from all of provided escapeResults
+double get_normalised_escape_step(EscapeResult *escapeResults, int num_results)
+{
+    double *smoothed = malloc(num_results * sizeof(double));
+    // Always check if malloc was successful
+    if (smoothed == NULL)
     {
-        return COLOUR_MAP[index];
+        fprintf(stderr, "Failed to allocate memory for smoothed array\n");
+        // Return a default/error colour, e.g., black
+        return 1.0f;
     }
+
+    for (int i = 0; i < num_results; i++)
+    {
+        if (escapeResults[i].steps == max_steps)
+        {
+            smoothed[i] = 1;
+        }
+        else
+        {
+            smoothed[i] = get_renormalised_count(escapeResults[i].steps, escapeResults[i].z_re, escapeResults[i].z_im) / max_steps; // between 0 and 1
+        }
+    }
+
+    double normalised_escape_step = average(smoothed, num_results);
+    free(smoothed);
+
+    if (normalised_escape_step > 1)
+    {
+        return 1.0f;
+    }
+    return normalised_escape_step;
 }

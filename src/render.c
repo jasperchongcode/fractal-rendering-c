@@ -14,6 +14,9 @@ double y_min = DEFAULT_Y_MIN;
 double y_max = DEFAULT_Y_MAX;
 
 uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
+// Store the mutlisample escape steps per pixel (normalised 0-1)
+// todo could be good to change this to double eventually
+double normalised_escape_step_buffer[WINDOW_WIDTH * WINDOW_HEIGHT];
 
 int samples_per_pixel = SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH;
 
@@ -79,13 +82,37 @@ void render_fractal(void)
                     escapeResults[s] = verify_in_fractal(point, C);
                 }
 
-                ColourRGBA pixel_colour = get_pixel_colour(escapeResults, samples_per_pixel);
+                double normalised_escape_step = get_normalised_escape_step(escapeResults, samples_per_pixel);
 
-                uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
-                pixels[r * WINDOW_WIDTH + c] = flat_colour;
+                normalised_escape_step_buffer[r * WINDOW_WIDTH + c] = normalised_escape_step;
             }
         }
         free(escapeResults);
+    }
+
+    // Strategy 1, find the min and then adjust the min
+    double min_normalised_escape_step = normalised_escape_step_buffer[0];
+
+    for (int i = 1; i < WINDOW_WIDTH * WINDOW_HEIGHT; i++)
+    {
+        if (normalised_escape_step_buffer[i] < min_normalised_escape_step)
+        {
+            min_normalised_escape_step = normalised_escape_step_buffer[i]; // Update min if a smaller element is found
+        }
+    }
+    // printf("NORMALISED\n");
+    // printf("%f\n.", min_normalised_escape_step);
+
+#pragma omp parallel for schedule(dynamic, 1)
+    for (int r = 0; r < WINDOW_HEIGHT; r++)
+    {
+        for (int c = 0; c < WINDOW_WIDTH; c++)
+        {
+            ColourRGBA pixel_colour = get_pixel_colour(normalised_escape_step_buffer[r * WINDOW_WIDTH + c], min_normalised_escape_step);
+
+            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+            pixels[r * WINDOW_WIDTH + c] = flat_colour;
+        }
     }
 
     // swap to buffer
@@ -104,6 +131,13 @@ void render_save_fractal(char *filename, int window_width, int window_height)
         fprintf(stderr, "Memory Allocation for Image Rendering failed. \n");
         return;
     }
+    double *image_normalised_escape_step_buffer = malloc(window_width * window_height * sizeof(double));
+    if (!image_normalised_escape_step_buffer)
+    {
+        fprintf(stderr, "Memory Allocation for normalised_escape_step_buffer Image Rendering failed. \n");
+        return;
+    }
+
     // Constants required for multisampling
     int image_samples_per_pixel = IMAGE_SAMPLE_GRID_WIDTH * IMAGE_SAMPLE_GRID_WIDTH;
 
@@ -158,15 +192,45 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                     // Calculate escape results
                     escapeResults[s] = verify_in_fractal(point, C);
                 }
-                // get the pixel colour from the average of the multisampling
-                ColourRGBA pixel_colour = get_pixel_colour(escapeResults, image_samples_per_pixel);
-                // store in pixel buffer as uint32_t
-                uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
-                pixel_buffer[r * window_width + c] = flat_colour;
+                // // get the pixel colour from the average of the multisampling
+                // ColourRGBA pixel_colour = get_pixel_colour(escapeResults, image_samples_per_pixel);
+                // // store in pixel buffer as uint32_t
+                // uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+                // pixel_buffer[r * window_width + c] = flat_colour;
+
+                double normalised_escape_step = get_normalised_escape_step(escapeResults, samples_per_pixel);
+
+                image_normalised_escape_step_buffer[r * window_width + c] = normalised_escape_step;
             }
         }
         free(escapeResults);
     }
+
+    // Strategy 1, find the min and then adjust the min
+    double min_normalised_escape_step = image_normalised_escape_step_buffer[0];
+
+    for (int i = 1; i < window_width * window_height; i++)
+    {
+        if (image_normalised_escape_step_buffer[i] < min_normalised_escape_step)
+        {
+            min_normalised_escape_step = image_normalised_escape_step_buffer[i]; // Update min if a smaller element is found
+        }
+    }
+    // printf("NORMALISED\n");
+    // printf("%f\n.", min_normalised_escape_step);
+
+#pragma omp parallel for schedule(dynamic, 1)
+    for (int r = 0; r < window_height; r++)
+    {
+        for (int c = 0; c < window_width; c++)
+        {
+            ColourRGBA pixel_colour = get_pixel_colour(image_normalised_escape_step_buffer[r * window_width + c], min_normalised_escape_step);
+
+            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+            pixel_buffer[r * window_width + c] = flat_colour;
+        }
+    }
+
     // Create a surface for image creation
     SDL_Surface *surface = SDL_CreateRGBSurfaceWithFormatFrom(
         pixel_buffer, // pointer to our RGBA8888 data

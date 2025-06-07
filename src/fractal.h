@@ -16,6 +16,7 @@ typedef struct
 } Complex;
 
 extern int fractal_index;
+extern int max_steps;
 
 // EscapeResult verify_in_mandelbrot(Complex point);
 

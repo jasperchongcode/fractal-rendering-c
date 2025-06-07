@@ -148,3 +148,34 @@ void handle_toggle_fractal(int index)
 
     render_fractal();
 }
+
+void handle_change_exponential_bias(float change)
+{
+    if (exponential_bias + change < 0)
+    {
+        exponential_bias = 0;
+    }
+    else
+    {
+
+        exponential_bias += change;
+    }
+    printf("Exponential Bias: %f\n", exponential_bias);
+    render_fractal();
+}
+
+void handle_change_max_steps(int change)
+{
+
+    if (max_steps + change <= 0)
+    {
+        max_steps = 1;
+    }
+    else
+    {
+        max_steps += change;
+    }
+    printf("Max Escape Steps: %d\n", max_steps);
+
+    render_fractal();
+}

@@ -4,6 +4,7 @@
 #include "constants.h"
 
 int fractal_index = 0;
+int max_steps = DEFAULT_MAX_STEPS;
 
 /**
  * returns renormalised count to prevent bands, return -1 if never escapes
@@ -15,7 +16,7 @@ EscapeResult verify_in_mandelbrot(Complex point)
     double z_re = 0;
     double z_im = 0;
 
-    for (int i = 0; i < MAX_STEPS; i++)
+    for (int i = 0; i < max_steps; i++)
     {
         if ((z_re * z_re + z_im * z_im) >= 4)
         {
@@ -35,7 +36,7 @@ EscapeResult verify_in_mandelbrot(Complex point)
     }
     // printf("MADE TO END %d \n", 2);
     EscapeResult output;
-    output.steps = MAX_STEPS;
+    output.steps = max_steps;
     output.z_re = z_re;
     output.z_im = z_im;
     return output;
@@ -48,7 +49,7 @@ EscapeResult verify_in_julia(Complex point, Complex c)
     double z_re = point.re;
     double z_im = point.im;
 
-    for (int i = 0; i < MAX_STEPS; i++)
+    for (int i = 0; i < max_steps; i++)
     {
         if ((z_re * z_re + z_im * z_im) >= 4)
         {
@@ -68,7 +69,7 @@ EscapeResult verify_in_julia(Complex point, Complex c)
     }
     // printf("MADE TO END %d \n", 2);
     EscapeResult output;
-    output.steps = MAX_STEPS;
+    output.steps = max_steps;
     output.z_re = z_re;
     output.z_im = z_im;
     return output;

@@ -8,6 +8,7 @@ ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
 ColourRGBA fill_colour = {0, 0, 0, 255};
 uint8_t use_fill_colour = 1; // boolean
 uint8_t colour_theme_index = 0;
+float exponential_bias = DEFAULT_EXPONENTIAL_BIAS;
 
 void initialise_colour_map()
 {
@@ -108,8 +109,11 @@ ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised
             return COLOUR_MAP[COLOUR_MAP_LENGTH - 1];
         }
     }
-
-    int index = (int)(((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)) * COLOUR_MAP_LENGTH);
+    // linear transform from min value and then apply power
+    double unrounded_index = ((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)); // * COLOUR_MAP_LENGTH
+    unrounded_index = pow(unrounded_index, exponential_bias) * COLOUR_MAP_LENGTH;                                        // Bias it a little darker before returning index                                                   // smoothstep function
+    // unrounded_index = pow(unrounded_index, 0.5);
+    int index = (int)unrounded_index;
 
     return COLOUR_MAP[index];
 }
@@ -128,13 +132,13 @@ double get_normalised_escape_step(EscapeResult *escapeResults, int num_results)
 
     for (int i = 0; i < num_results; i++)
     {
-        if (escapeResults[i].steps == MAX_STEPS)
+        if (escapeResults[i].steps == max_steps)
         {
             smoothed[i] = 1;
         }
         else
         {
-            smoothed[i] = get_renormalised_count(escapeResults[i].steps, escapeResults[i].z_re, escapeResults[i].z_im) / MAX_STEPS; // between 0 and 1
+            smoothed[i] = get_renormalised_count(escapeResults[i].steps, escapeResults[i].z_re, escapeResults[i].z_im) / max_steps; // between 0 and 1
         }
     }
 

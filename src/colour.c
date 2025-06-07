@@ -17,7 +17,11 @@ void initialise_colour_map()
 
         float t = (float)i / (COLOUR_MAP_LENGTH - 1); // normalized 0..1
 
-        float brightness = logf(1 + 9 * t) / logf(10); // nonlinear log
+        // float brightness = logf(1 + 9 * t) / logf(10); // nonlinear log
+        // float brightness = t;
+        const float alpha = 1.0f;
+        // map t∈[0,1] → [0,1] via (e^(αt)–1)/(e^α–1)
+        float brightness = (expf(alpha * t) - 1.0f) / (expf(alpha) - 1.0f);
 
         // start with all 0
         Uint8 green = 0;
@@ -95,9 +99,9 @@ void toggle_fill_colour(void)
 }
 
 // returns a colourrgba object after shifting the normalised escape step by min
-ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised_escape_step)
+ColourRGBA get_pixel_colour(int index)
 {
-    if (min_normalised_escape_step == 1 || normalised_escape_step == 1)
+    if (index == COLOUR_MAP_LENGTH)
     {
         if (use_fill_colour)
         {
@@ -109,7 +113,7 @@ ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised
         }
     }
 
-    int index = (int)(((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)) * COLOUR_MAP_LENGTH);
+    // int index = (int)(((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)) * COLOUR_MAP_LENGTH);
 
     return COLOUR_MAP[index];
 }

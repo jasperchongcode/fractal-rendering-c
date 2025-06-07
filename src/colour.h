@@ -22,7 +22,7 @@ void toggle_fill_colour(void);
 
 void initialise_colour_map(void);
 
-ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised_escape_step);
+ColourRGBA get_pixel_colour(int index);
 
 double get_normalised_escape_step(EscapeResult *escapeResults, int num_results);
 

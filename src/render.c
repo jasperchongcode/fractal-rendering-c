@@ -100,8 +100,8 @@ void render_fractal(void)
             min_normalised_escape_step = normalised_escape_step_buffer[i]; // Update min if a smaller element is found
         }
     }
-    printf("NORMALISED\n");
-    printf("%f\n.", min_normalised_escape_step);
+    // printf("NORMALISED\n");
+    // printf("%f\n.", min_normalised_escape_step);
 
 #pragma omp parallel for schedule(dynamic, 1)
     for (int r = 0; r < WINDOW_HEIGHT; r++)
@@ -119,7 +119,7 @@ void render_fractal(void)
     SDL_UpdateTexture(texture, NULL, pixels, WINDOW_WIDTH * sizeof(uint32_t));
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer); // swap buffers
-    printf("RENDERED NEW FRACTAL\n");
+    // printf("RENDERED NEW FRACTAL\n");
 }
 
 void render_save_fractal(char *filename, int window_width, int window_height)

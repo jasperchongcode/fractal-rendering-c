@@ -18,4 +18,8 @@ void handle_reset_view(void);
 // can put -1 to cycle
 void handle_toggle_fractal(int);
 
+void handle_change_exponential_bias(float);
+
+void handle_change_max_steps(int);
+
 #endif

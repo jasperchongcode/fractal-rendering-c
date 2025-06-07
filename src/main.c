@@ -25,6 +25,14 @@ int main()
 	printf(" * n - cycle to next fractal.\n");
 	printf(" * 1 - switch to julia set.\n");
 	printf(" * 2 - switch to mandelbrot set.\n");
+	printf(" * , and . - decrease and increase exponential colour bias respectively"); // write a readme explaining what this does
+	printf(" * < and > decrease and increase the maximum calculated escape steps respectively");
+	// suggested workflow
+	// if too dark / too light change exp bias
+	// if run into black (or in set) blobs increase max escape steps
+	// move the mouse in the julia set to find a nice one then use m to lock it
+	// zoom in to find a nice photo then adjust settings nad colout settings then take a screenshot
+	// unlock m and swap between julia and mandelbrot to see how inside the mandelbrot is a filled julia
 
 	while (window_is_running)
 	{

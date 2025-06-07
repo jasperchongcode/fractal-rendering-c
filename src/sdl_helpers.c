@@ -122,6 +122,32 @@ void process_input(void)
         case SDLK_2:
             handle_toggle_fractal(1);
             break;
+        case SDLK_COMMA:
+            // for decreasing escape steps if "<"
+            if (event.key.keysym.mod & KMOD_SHIFT)
+            {
+                // printf("decrease escape steps and rerender\n");
+                handle_change_max_steps(-50);
+            }
+            else
+            {
+                // printf("decrease exp bias and rerender");
+                handle_change_exponential_bias(-0.1f);
+            }
+            break;
+        case SDLK_PERIOD:
+            // for increase escape steps if ">"
+            if (event.key.keysym.mod & KMOD_SHIFT)
+            {
+                // printf("increase escape steps and rerender");
+                handle_change_max_steps(50); // todo consider making this a multiply e.g. double or half
+            }
+            else
+            {
+                // printf("increase exp bias and rerender");
+                handle_change_exponential_bias(0.1f);
+            }
+            break;
         }
 
         break;

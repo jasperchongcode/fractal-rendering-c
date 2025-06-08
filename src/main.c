@@ -25,8 +25,8 @@ int main()
 	printf(" * n - cycle to next fractal.\n");
 	printf(" * 1 - switch to julia set.\n");
 	printf(" * 2 - switch to mandelbrot set.\n");
-	printf(" * , and . - decrease and increase exponential colour bias respectively"); // write a readme explaining what this does
-	printf(" * < and > decrease and increase the maximum calculated escape steps respectively");
+	printf(" * , and . - decrease and increase exponential colour bias respectively\n"); // write a readme explaining what this does
+	printf(" * < and > decrease and increase the maximum calculated escape steps respectively\n");
 	// suggested workflow
 	// if too dark / too light change exp bias
 	// if run into black (or in set) blobs increase max escape steps

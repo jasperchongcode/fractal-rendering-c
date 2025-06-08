@@ -110,10 +110,10 @@ ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised
         }
     }
     // linear transform from min value and then apply power
-    double unrounded_index = ((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)); // * COLOUR_MAP_LENGTH
-    unrounded_index = pow(unrounded_index, exponential_bias) * COLOUR_MAP_LENGTH;                                        // Bias it a little darker before returning index                                                   // smoothstep function
+    double linear_normalised_index = ((normalised_escape_step - min_normalised_escape_step) / (1 - min_normalised_escape_step)); // * COLOUR_MAP_LENGTH
+    // unrounded_index = pow(unrounded_index, exponential_bias) * COLOUR_MAP_LENGTH;                                        // Bias it a little darker before returning index                                                   // smoothstep function
     // unrounded_index = pow(unrounded_index, 0.5);
-    int index = (int)unrounded_index;
+    int index = (int)(pow(linear_normalised_index, exponential_bias) * COLOUR_MAP_LENGTH);
 
     return COLOUR_MAP[index];
 }

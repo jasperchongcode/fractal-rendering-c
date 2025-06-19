@@ -25,13 +25,19 @@ void initialise_colour_map()
         Uint8 blue = 0;
         Uint8 red = 0;
 
+        float scale = 3.0f * M_PI; // 1 full cycle
+        float stagger = 0.0f;      // optional per-pixel randomness
+
         // Handle different colour themes
         switch (colour_theme_index)
         {
+        case 9:
+            // cyclical rainbow theme
+            red = (Uint8)((0.5f + 0.5f * sinf(t * scale + 0.0f + stagger)) * 255.0f);
+            green = (Uint8)((0.5f + 0.5f * sinf(t * scale + 2.0944f + stagger)) * 255.0f); // +120°
+            blue = (Uint8)((0.5f + 0.5f * sinf(t * scale + 4.1888f + stagger)) * 255.0f);  // +240°
+            break;
         case 0:
-            // red = (Uint8)fmodf(powf(brightness * 360.0f, 1.5f), 360.0f);
-            // green = 100;
-            // blue = (Uint8)(brightness * 100);
             green = (Uint8)(brightness * 255); // green increases
             break;
         case 1:

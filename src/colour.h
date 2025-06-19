@@ -12,7 +12,7 @@ typedef struct
 } ColourRGBA;
 
 #define COLOUR_MAP_LENGTH 1000
-#define NUM_COLOUR_THEMES 9
+#define NUM_COLOUR_THEMES 10
 #define DEFAULT_EXPONENTIAL_BIAS 1.0f // Renormalised escape values are raised to this power, > 1 => darker bias < 1 => lighter bias (generally)
 
 extern ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];

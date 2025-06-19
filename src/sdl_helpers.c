@@ -84,6 +84,9 @@ void process_input(void)
         case SDLK_ESCAPE:
             window_is_running = FALSE;
             break;
+        case SDLK_a:
+            toggle_run_animation();
+            break;
         case SDLK_s:
             handle_save_image();
             break;
@@ -154,6 +157,10 @@ void process_input(void)
     case SDL_MOUSEMOTION:
         // printf("(%d, %d)", event.motion.x, event.motion.y);
         handle_mouse_move(event.motion.x, event.motion.y);
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+        centre_view(event.motion.x, event.motion.y);
+        move_mouse_centre();
         break;
     }
 }

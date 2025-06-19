@@ -5,7 +5,7 @@
 #include "fractal.h"
 
 ColourRGBA COLOUR_MAP[COLOUR_MAP_LENGTH];
-ColourRGBA fill_colour = {0, 0, 0, 255};
+// ColourRGBA fill_colour = {0, 0, 0, 255};
 uint8_t use_fill_colour = 1; // boolean
 uint8_t colour_theme_index = 0;
 float exponential_bias = DEFAULT_EXPONENTIAL_BIAS;
@@ -102,7 +102,7 @@ ColourRGBA get_pixel_colour(double normalised_escape_step, double min_normalised
     {
         if (use_fill_colour)
         {
-            return fill_colour;
+            return COLOUR_MAP[0];
         }
         else
         {

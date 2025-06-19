@@ -1,7 +1,9 @@
 #include "constants.h"
 #include "sdl_helpers.h"
+#include "handlers.h"
 #include "render.h"
 #include "colour.h"
+#include "math.h"
 
 void setup(void)
 {
@@ -9,6 +11,24 @@ void setup(void)
 	initialise_offsets();
 	initialise_colour_map();
 	render_fractal();
+}
+
+void update(void)
+{
+	if (!run_animation)
+	{
+		return;
+	}
+
+	double radius = 1.1;
+	static double angle = 0.0;
+	double angle_step = 0.01;
+	// Update the position in a circle
+	angle += angle_step;
+	C.re = radius * cos(angle);
+	C.im = radius * sin(angle);
+	render_fractal();
+	// printf("Change C (%f, %f)\n", C.im, C.re);
 }
 
 int main()
@@ -27,6 +47,8 @@ int main()
 	printf(" * 2 - switch to mandelbrot set.\n");
 	printf(" * , and . - decrease and increase exponential colour bias respectively\n"); // write a readme explaining what this does
 	printf(" * < and > decrease and increase the maximum calculated escape steps respectively\n");
+	printf(" * [mouse down] - centre view on mouse.\n");
+	printf(" * a - toggle animation (julia set).\n");
 	// suggested workflow
 	// if too dark / too light change exp bias
 	// if run into black (or in set) blobs increase max escape steps
@@ -37,6 +59,7 @@ int main()
 	while (window_is_running)
 	{
 		process_input();
+		// update(); // Uncomment to have animation option
 	}
 
 	destroy_window();

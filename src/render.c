@@ -7,12 +7,18 @@
 #include "sdl_helpers.h"
 #include <omp.h>
 
+// ===========
+// = Globals =
+// ===========
 Complex C = {1, 1};
 double x_min = DEFAULT_X_MIN;
 double x_max = DEFAULT_X_MAX;
 double y_min = DEFAULT_Y_MIN;
 double y_max = DEFAULT_Y_MAX;
 
+// =============
+// = Variables =
+// =============
 uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
 // Store the mutlisample escape steps per pixel (normalised 0-1)
 // todo could be good to change this to double eventually
@@ -24,6 +30,9 @@ int samples_per_pixel = SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH;
 double offsets_x[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
 double offsets_y[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
 
+/**
+ * Setup the offsets for the selected sample grid
+ */
 void initialise_offsets(void)
 {
     // initialise the offsets
@@ -41,12 +50,14 @@ void initialise_offsets(void)
 
 void render_fractal(void)
 {
-    // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
     SDL_RenderClear(renderer);
 
     double pixel_width = (x_max - x_min) / WINDOW_WIDTH;
     double pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
 
+    // ==============================
+    // = // Calculate EscapeResults =
+    // ==============================
 #pragma omp parallel
     {
         // allocate memory for escapeResults for each thread
@@ -62,10 +73,6 @@ void render_fractal(void)
         {
             for (int c = 0; c < WINDOW_WIDTH; c++)
             {
-                // Number of samples per pixel, e.g., 4 (2x2 grid)
-
-                // EscapeResult escapeResults[samples_per_pixel];
-
                 // Sample positions within the pixel, offsets normalized between 0 and 1
 
                 for (int s = 0; s < samples_per_pixel; s++)
@@ -90,7 +97,10 @@ void render_fractal(void)
         free(escapeResults);
     }
 
-    // Strategy 1, find the min and then adjust the min
+    // ================================
+    // =   Renormalise pixel colours  =
+    // ================================
+    // Calculate Min
     double min_normalised_escape_step = normalised_escape_step_buffer[0];
 
     for (int i = 1; i < WINDOW_WIDTH * WINDOW_HEIGHT; i++)
@@ -100,9 +110,8 @@ void render_fractal(void)
             min_normalised_escape_step = normalised_escape_step_buffer[i]; // Update min if a smaller element is found
         }
     }
-    // printf("NORMALISED\n");
-    // printf("%f\n.", min_normalised_escape_step);
 
+    // Calculate pixel colours based off min
 #pragma omp parallel for schedule(dynamic, 1)
     for (int r = 0; r < WINDOW_HEIGHT; r++)
     {
@@ -115,11 +124,13 @@ void render_fractal(void)
         }
     }
 
+    // ===================
+    // = Present to User =
+    // ===================
     // swap to buffer
     SDL_UpdateTexture(texture, NULL, pixels, WINDOW_WIDTH * sizeof(uint32_t));
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer); // swap buffers
-    // printf("RENDERED NEW FRACTAL\n");
 }
 
 void render_save_fractal(char *filename, int window_width, int window_height)

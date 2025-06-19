@@ -1,7 +1,13 @@
 #ifndef HANDLERS_H
 #define HANDLERS_H
 
+extern uint8_t run_animation;
+
+void toggle_run_animation(void);
+
 void handle_mouse_move(int x, int y);
+
+void centre_view(int x, int y);
 
 void handle_save_image(void);
 

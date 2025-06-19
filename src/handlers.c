@@ -8,9 +8,16 @@
 // float ZOOM_FACTOR = 2;
 
 uint8_t change_fractal_with_mouse = 1;
+uint8_t run_animation = 0;
 
 int mouse_x = 0;
 int mouse_y = 0;
+
+void toggle_run_animation(void)
+{
+    run_animation = !run_animation;
+    change_fractal_with_mouse = 0;
+}
 
 Complex get_point_from_mouse(int x, int y)
 {
@@ -83,6 +90,25 @@ void handle_zoom(int zoom_in)
     x_max = temp_x_max;
     y_min = temp_y_min;
     y_max = temp_y_max;
+
+    render_fractal();
+}
+
+void centre_view(int x, int y)
+{
+    // Make it so the fractal is locked when moving by default
+    change_fractal_with_mouse = 0;
+
+    Complex point = get_point_from_mouse(mouse_x, mouse_y);
+
+    // Shift window center to origin, then move to (point.re, point.im)
+    double dx = point.re - (x_max + x_min) / 2;
+    double dy = point.im - (y_max + y_min) / 2;
+
+    x_min += dx;
+    x_max += dx;
+    y_min += dy;
+    y_max += dy;
 
     render_fractal();
 }

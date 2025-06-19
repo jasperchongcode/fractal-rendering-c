@@ -59,7 +59,7 @@ int main()
 	while (window_is_running)
 	{
 		process_input();
-		// update(); // Uncomment to have animation option
+		update(); // Uncomment to have animation option
 	}
 
 	destroy_window();

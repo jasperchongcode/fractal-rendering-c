@@ -1,6 +1,7 @@
 # Fractal Viewer (SDL2)
 
 A real-time interactive Mandelbrot and Julia set renderer using SDL2, with color customization, zooming, animation, and high-quality screenshot capture.
+Currently supports the Mandelbrot set and Julia sets (try and uncover the interaction!).
 
 ## Features
 
@@ -43,11 +44,6 @@ A real-time interactive Mandelbrot and Julia set renderer using SDL2, with color
 
 - If the image is **too dark or too bright**, use `,` and `.` to adjust the **exponential color bias**. This alters how quickly color intensity grows, making subtle structures more visible.
 - If you see large black blobs that don’t resolve detail, increase the **maximum escape steps** using `>`.
-- To explore Julia sets interactively:
-
-  1. Use mouse control (`m`) to move around the Mandelbrot set.
-  2. Zoom in (`i`) to refine the view.
-  3. Switch to Julia set (`1`) and toggle animation (`a`) to watch how it evolves.
 
 - For best screenshots:
 

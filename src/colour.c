@@ -29,6 +29,9 @@ void initialise_colour_map()
         switch (colour_theme_index)
         {
         case 0:
+            // red = (Uint8)fmodf(powf(brightness * 360.0f, 1.5f), 360.0f);
+            // green = 100;
+            // blue = (Uint8)(brightness * 100);
             green = (Uint8)(brightness * 255); // green increases
             break;
         case 1:

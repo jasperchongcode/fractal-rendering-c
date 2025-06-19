@@ -45,6 +45,7 @@ int main()
 	printf(" * n - cycle to next fractal.\n");
 	printf(" * 1 - switch to julia set.\n");
 	printf(" * 2 - switch to mandelbrot set.\n");
+	printf(" * 3 - switch to burning ship set.\n");
 	printf(" * , and . - decrease and increase exponential colour bias respectively\n"); // write a readme explaining what this does
 	printf(" * < and > decrease and increase the maximum calculated escape steps respectively\n");
 	printf(" * [mouse down] - centre view on mouse.\n");

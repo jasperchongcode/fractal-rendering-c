@@ -33,6 +33,7 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 | `n`         | Cycle to the next fractal variant                                      |
 | `1`         | Switch to Julia set                                                    |
 | `2`         | Switch to Mandelbrot set                                               |
+| `3`         | Switch to Burning Ship set                                             |
 | `,` / `.`   | Decrease / increase exponential color bias                             |
 | `<` / `>`   | Decrease / increase max escape steps                                   |
 | Mouse click | Center view on mouse location                                          |
@@ -89,7 +90,7 @@ If you’re on another system, you may need to adjust the `-I` and `-L` paths in
 
 ## 📸 Screenshots
 
-### Double Pass Rendering
+### Travellers
 
 ![Double Pass Rendering](images/double%20pass%20rendering%20test.png)
 

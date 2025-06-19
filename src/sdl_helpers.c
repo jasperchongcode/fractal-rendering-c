@@ -125,6 +125,9 @@ void process_input(void)
         case SDLK_2:
             handle_toggle_fractal(1);
             break;
+        case SDLK_3:
+            handle_toggle_fractal(2);
+            break;
         case SDLK_COMMA:
             // for decreasing escape steps if "<"
             if (event.key.keysym.mod & KMOD_SHIFT)

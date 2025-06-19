@@ -1,7 +1,7 @@
 #ifndef FRACTAL_H
 #define FRACTAL_H
 
-#define NUM_FRACTALS 2
+#define NUM_FRACTALS 3
 typedef struct
 {
     int steps;

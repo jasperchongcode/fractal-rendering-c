@@ -174,7 +174,9 @@ If you’re on another system, you may need to adjust the `-I` and `-L` paths in
 
 ![Zoomed Flower Spiral](images/zoomed%20flower%20spiral.png)
 
----
+### Burning Ship
+
+## ![Burning Ship](images/burning%20ship.png)
 
 ## License
 

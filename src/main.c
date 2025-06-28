@@ -38,6 +38,7 @@ int main()
 	printf("Keybinds:\n");
 	printf(" * esc - close the program\n");
 	printf(" * s - take a high quality screenshot\n");
+	printf(" * t - toggle the colour theme.\n");
 	printf(" * f - toggle the 'in the set colour' between black and the natural progression (black is sometimes poor for photos)\n");
 	printf(" * m - toggle using the mouse to change the fractal.\n");
 	printf(" * i - zoom in to mouse location by ZOOM_FACTOR and reset mouse to centre (this also disables using mouse to change fractal).\n");

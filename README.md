@@ -1,6 +1,6 @@
 # Fractal Viewer (SDL2)
 
-A real-time interactive Mandelbrot and Julia set renderer using SDL2, with color customization, zooming, animation, and high-quality screenshot capture.
+A real-time interactive Mandelbrot and Julia set renderer using SDL2, with colour customization, zooming, animation, and high-quality screenshot capture.
 Currently supports the Mandelbrot set and Julia sets (try and uncover the interaction!).
 
 ## Features
@@ -12,9 +12,9 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 - Capture high-resolution screenshots.
 - Fine-grained control over visual appearance via:
 
-  - Exponential color bias adjustment.
+  - Exponential colour bias adjustment.
   - Max escape step tweaking.
-  - Custom color map.
+  - Various colour themes (including progressive and cyclical gradients).
 
 - Smooth animations via rotating complex parameter `C` in the Julia set.
 
@@ -28,7 +28,8 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 | ----------- | ------------------------------------------------------------------------------- |
 | `ESC`       | Exit the program                                                                |
 | `s`         | Save a high-resolution screenshot                                               |
-| `f`         | Toggle the color of "in the set" pixels (contrasted or natural progression)     |
+| `t`         | Toggle colour theme                                                             |
+| `f`         | Toggle the colour of "in the set" pixels (contrasted or natural progression)    |
 | `m`         | Toggle mouse control for adjusting the Julia parameter `C`                      |
 | `i`         | Zoom **in** at mouse location and reset mouse to center (use I for larger zoom) |
 | `o`         | Zoom **out** from mouse location (use O for larger zoom)                        |
@@ -36,7 +37,7 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 | `1`         | Switch to Julia set                                                             |
 | `2`         | Switch to Mandelbrot set                                                        |
 | `3`         | Switch to Burning Ship set                                                      |
-| `,` / `.`   | Decrease / increase exponential color bias                                      |
+| `,` / `.`   | Decrease / increase exponential colour bias                                     |
 | `<` / `>`   | Decrease / increase max escape steps                                            |
 | Mouse click | Center view on mouse location                                                   |
 | `a`         | Toggle animation for the Julia set                                              |
@@ -46,12 +47,12 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 
 ## Visual Tuning Tips
 
-- If the image is **too dark or too bright**, use `,` and `.` to adjust the **exponential color bias**. This alters how quickly color intensity grows, making subtle structures more visible.
+- If the image is **too dark or too bright**, use `,` and `.` to adjust the **exponential colour bias**. This alters how quickly colour intensity grows, making subtle structures more visible.
 - If you see large black blobs that don’t resolve detail, increase the **maximum escape steps** using `>`.
 
 - For best screenshots:
 
-  - Adjust colors and zoom level (use both large and small zoom levels for fine adjustment).
+  - Adjust colour theme and zoom level (use both large and small zoom levels for fine adjustment).
   - Freeze animation (`a`) and lock mouse input (`m`).
   - Then press `s` to save a snapshot.
 
@@ -112,6 +113,10 @@ If you’re on another system, you may need to adjust the `-I` and `-L` paths in
 ### Julia Flower
 
 ![Main Background](images/main%20background.png)
+
+### Cyclical Colours Demo (Mandelbrot)
+
+![Cyclical Mandelbrot](images/cyclical_mandelbrot.png)
 
 ### Mandelbrot Spiral
 

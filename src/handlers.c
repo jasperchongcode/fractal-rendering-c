@@ -19,6 +19,16 @@ void toggle_run_animation(void)
     change_fractal_with_mouse = 0;
 }
 
+void print_complex_location(void)
+{
+    printf("----RANGE----\n");
+    printf("Top Left: (%.17f, %.17f)\n", x_min, y_max);
+    printf("Bottom Right: (%.17f, %.17f)\n", x_max, y_min);
+    printf("----POINTS----\n");
+    printf("Centre Point: (%.17f, %.17f)\n", x_min + ((x_max - x_min) / 2), y_min + ((y_max - y_min) / 2));
+    printf("C (For Julia): (%.17f, %.17f)\n", C.re, C.im);
+}
+
 Complex get_point_from_mouse(int x, int y)
 {
     double normalised_x = ((double)x) / WINDOW_WIDTH;
@@ -46,7 +56,7 @@ void handle_reset_view(void)
     render_fractal();
 }
 
-void handle_zoom(int zoom_in)
+void handle_zoom(float zoom_factor)
 {
     // Make it so the fractal is locked when zooming by default
     change_fractal_with_mouse = 0;
@@ -54,10 +64,10 @@ void handle_zoom(int zoom_in)
     Complex point = get_point_from_mouse(mouse_x, mouse_y);
 
     // Set the proper scaling factor depending on if its zooming in or out
-    float scaling_factor = ZOOM_FACTOR;
-    if (zoom_in)
+    float scaling_factor = zoom_factor;
+    if (zoom_factor < 0)
     {
-        scaling_factor = 1 / ZOOM_FACTOR;
+        scaling_factor = 1 / -zoom_factor;
     }
 
     double temp_x_min = x_min;

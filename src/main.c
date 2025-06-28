@@ -39,9 +39,10 @@ int main()
 	printf(" * esc - close the program\n");
 	printf(" * s - take a high quality screenshot\n");
 	printf(" * f - toggle the 'in the set colour' between black and the natural progression (black is sometimes poor for photos)\n");
-	printf(" * m - toggle using the mouse to change the fractal");
+	printf(" * m - toggle using the mouse to change the fractal.\n");
 	printf(" * i - zoom in to mouse location by ZOOM_FACTOR and reset mouse to centre (this also disables using mouse to change fractal).\n");
 	printf(" * o - same as above but zooms out instead.\n");
+	printf(" * I/O - same as above but zooms by larger factor.\n");
 	printf(" * n - cycle to next fractal.\n");
 	printf(" * 1 - switch to julia set.\n");
 	printf(" * 2 - switch to mandelbrot set.\n");
@@ -50,6 +51,7 @@ int main()
 	printf(" * < and > decrease and increase the maximum calculated escape steps respectively\n");
 	printf(" * [mouse down] - centre view on mouse.\n");
 	printf(" * a - toggle animation (julia set).\n");
+	printf(" * g - get details about the window location and points and log to terminal.\n");
 	// suggested workflow
 	// if too dark / too light change exp bias
 	// if run into black (or in set) blobs increase max escape steps

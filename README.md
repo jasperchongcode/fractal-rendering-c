@@ -18,26 +18,29 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 
 - Smooth animations via rotating complex parameter `C` in the Julia set.
 
+> **Note:** The y axis increases downwards (opposite to a standard graph) to make the mouse movements more intuitive.
+
 ---
 
 ## Keybindings
 
-| Key         | Action                                                                 |
-| ----------- | ---------------------------------------------------------------------- |
-| `ESC`       | Exit the program                                                       |
-| `s`         | Save a high-resolution screenshot                                      |
-| `f`         | Toggle the color of "in the set" pixels (black or natural progression) |
-| `m`         | Toggle mouse control for adjusting the Julia parameter `C`             |
-| `i`         | Zoom **in** at mouse location and reset mouse to center                |
-| `o`         | Zoom **out** from mouse location                                       |
-| `n`         | Cycle to the next fractal variant                                      |
-| `1`         | Switch to Julia set                                                    |
-| `2`         | Switch to Mandelbrot set                                               |
-| `3`         | Switch to Burning Ship set                                             |
-| `,` / `.`   | Decrease / increase exponential color bias                             |
-| `<` / `>`   | Decrease / increase max escape steps                                   |
-| Mouse click | Center view on mouse location                                          |
-| `a`         | Toggle animation for the Julia set                                     |
+| Key         | Action                                                                          |
+| ----------- | ------------------------------------------------------------------------------- |
+| `ESC`       | Exit the program                                                                |
+| `s`         | Save a high-resolution screenshot                                               |
+| `f`         | Toggle the color of "in the set" pixels (contrasted or natural progression)     |
+| `m`         | Toggle mouse control for adjusting the Julia parameter `C`                      |
+| `i`         | Zoom **in** at mouse location and reset mouse to center (use I for larger zoom) |
+| `o`         | Zoom **out** from mouse location (use O for larger zoom)                        |
+| `n`         | Cycle to the next fractal variant                                               |
+| `1`         | Switch to Julia set                                                             |
+| `2`         | Switch to Mandelbrot set                                                        |
+| `3`         | Switch to Burning Ship set                                                      |
+| `,` / `.`   | Decrease / increase exponential color bias                                      |
+| `<` / `>`   | Decrease / increase max escape steps                                            |
+| Mouse click | Center view on mouse location                                                   |
+| `a`         | Toggle animation for the Julia set                                              |
+| `g`         | Get mathematical location details logged to terminal                            |
 
 ---
 
@@ -48,7 +51,7 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 
 - For best screenshots:
 
-  - Adjust colors and zoom level.
+  - Adjust colors and zoom level (use both large and small zoom levels for fine adjustment).
   - Freeze animation (`a`) and lock mouse input (`m`).
   - Then press `s` to save a snapshot.
 

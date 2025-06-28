@@ -17,7 +17,7 @@ void handle_toggle_change_fractal_with_mouse(void);
 
 void handle_toggle_fill_colour(void);
 
-void handle_zoom(int zoom_in);
+void handle_zoom(float zoom_factor);
 
 void handle_reset_view(void);
 
@@ -27,5 +27,7 @@ void handle_toggle_fractal(int);
 void handle_change_exponential_bias(float);
 
 void handle_change_max_steps(int);
+
+void print_complex_location(void);
 
 #endif

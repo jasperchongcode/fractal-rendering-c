@@ -103,17 +103,35 @@ void process_input(void)
             break;
         case SDLK_i:
             // Handle zoom in
-            handle_zoom(1);
+            if (event.key.keysym.mod & KMOD_SHIFT)
+            {
+                handle_zoom(-ZOOM_INCREASE_FACTOR * ZOOM_FACTOR);
+            }
+            else
+            {
+                handle_zoom(-ZOOM_FACTOR);
+            }
             move_mouse_centre();
             break;
         case SDLK_o:
             // handle zoom out
-            handle_zoom(0);
+            if (event.key.keysym.mod & KMOD_SHIFT)
+            {
+                handle_zoom(ZOOM_INCREASE_FACTOR * ZOOM_FACTOR);
+            }
+            else
+            {
+                handle_zoom(ZOOM_FACTOR);
+            }
             move_mouse_centre();
             break;
         case SDLK_r:
             // Handle reset view window
             handle_reset_view();
+            break;
+        case SDLK_g:
+            // Log the current window range and point locations
+            print_complex_location();
             break;
         case SDLK_n:
             // cycle to next fractal

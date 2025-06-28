@@ -17,4 +17,5 @@
 #define IMAGE_WIDTH 3840
 #define IMAGE_SAMPLE_GRID_WIDTH 4
 
-#define ZOOM_FACTOR 1.5f
+#define ZOOM_FACTOR 1.05f
+#define ZOOM_INCREASE_FACTOR 1.5f // Factor applied when using shift+zoom

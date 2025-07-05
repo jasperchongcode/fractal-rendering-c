@@ -137,6 +137,10 @@ void process_input(void)
             // cycle to next fractal
             handle_toggle_fractal(-1);
             break;
+        case SDLK_l:
+            handle_load();
+            fflush(stdout);
+            break;
         case SDLK_1:
             handle_toggle_fractal(0);
             break;

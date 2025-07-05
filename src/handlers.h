@@ -30,4 +30,6 @@ void handle_change_max_steps(int);
 
 void print_complex_location(void);
 
+void handle_load(void);
+
 #endif

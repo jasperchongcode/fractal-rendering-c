@@ -4,6 +4,9 @@
 #include "colour.h"
 #include <SDL2/SDL.h>
 #include "sdl_helpers.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // float ZOOM_FACTOR = 2;
 
@@ -214,4 +217,90 @@ void handle_change_max_steps(int change)
     printf("Max Escape Steps: %d\n", max_steps);
 
     render_fractal();
+}
+
+int string_state_length = 1 + 6 * 24 + 4 + 4 + 2 + 9 + 1;
+
+char *
+get_string_location()
+{
+
+    // save in form fractal_index|x_min|x_max|y_min|y_max|C_re|C_im|max_steps|exponential_bias|colour_theme_index
+    // assume 1 char for fractal number, 4 chars for escape steps, 4 chars exp bias (sign+num+.+after), assume two char colour themee
+    // 1. get length of string
+
+    char *str = malloc(string_state_length);
+    // 2.
+    // todo use malloc free
+    snprintf(str, string_state_length, "%d|%.17f|%.17f|%.17f|%.17f|%.17f|%.17f|%d|%.1f|%d", fractal_index, x_min, x_max, y_min, y_max, C.re, C.im, max_steps, exponential_bias, colour_theme_index);
+    return str;
+}
+
+void handle_load()
+{
+    printf("Get string location\n");
+    char *current_state_str = get_string_location();
+    printf("%s\n", current_state_str);
+    free(current_state_str);
+
+    char *input_str = malloc(string_state_length);
+    printf("Enter state input:\n");
+
+    scanf("%s", input_str);
+
+    // if its of size 1 or 0 then skip
+    if (strlen(input_str) <= 1)
+    {
+        printf("Null input detected");
+        return;
+    }
+
+    char *token = strtok(input_str, "|");
+    int i = 0;
+
+    while (token != NULL)
+    {
+        printf("Token: %s\n", token);
+        switch (i)
+        {
+        case 0:
+            fractal_index = atoi(token);
+            break;
+        case 1:
+            x_min = strtod(token, NULL);
+            break;
+        case 2:
+            x_max = strtod(token, NULL);
+            break;
+        case 3:
+            y_min = strtod(token, NULL);
+            break;
+        case 4:
+            y_max = strtod(token, NULL);
+            break;
+        case 5:
+            C.re = strtod(token, NULL);
+            break;
+        case 6:
+            C.im = strtod(token, NULL);
+            break;
+        case 7:
+            max_steps = atoi(token);
+            break;
+        case 8:
+            exponential_bias = strtof(token, NULL);
+            break;
+        case 9:
+            colour_theme_index = atoi(token);
+            break;
+        }
+        printf("%s, %d\n", token, i);
+        token = strtok(NULL, "|");
+        i++;
+    }
+    initialise_colour_map();
+    render_fractal();
+    change_fractal_with_mouse = 0;
+    free(input_str);
+    printf("Finished loading.\n");
 }

@@ -138,8 +138,16 @@ void process_input(void)
             handle_toggle_fractal(-1);
             break;
         case SDLK_l:
-            handle_load();
-            fflush(stdout);
+            // Shift to load state, normal to get current state
+            if (event.key.keysym.mod & KMOD_SHIFT)
+            {
+                handle_load_state();
+            }
+            else
+            {
+                handle_log_state();
+                fflush(stdout);
+            }
             break;
         case SDLK_1:
             handle_toggle_fractal(0);

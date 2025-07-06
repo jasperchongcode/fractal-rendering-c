@@ -24,24 +24,26 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
 
 ## Keybindings
 
-| Key         | Action                                                                          |
-| ----------- | ------------------------------------------------------------------------------- |
-| `ESC`       | Exit the program                                                                |
-| `s`         | Save a high-resolution screenshot                                               |
-| `t`         | Toggle colour theme                                                             |
-| `f`         | Toggle the colour of "in the set" pixels (contrasted or natural progression)    |
-| `m`         | Toggle mouse control for adjusting the Julia parameter `C`                      |
-| `i`         | Zoom **in** at mouse location and reset mouse to center (use I for larger zoom) |
-| `o`         | Zoom **out** from mouse location (use O for larger zoom)                        |
-| `n`         | Cycle to the next fractal variant                                               |
-| `1`         | Switch to Julia set                                                             |
-| `2`         | Switch to Mandelbrot set                                                        |
-| `3`         | Switch to Burning Ship set                                                      |
-| `,` / `.`   | Decrease / increase exponential colour bias                                     |
-| `<` / `>`   | Decrease / increase max escape steps                                            |
-| Mouse click | Center view on mouse location                                                   |
-| `a`         | Toggle animation for the Julia set                                              |
-| `g`         | Get mathematical location details logged to terminal                            |
+| Key         | Action                                                                            |
+| ----------- | --------------------------------------------------------------------------------- |
+| `ESC`       | Exit the program                                                                  |
+| `s`         | Save a high-resolution screenshot                                                 |
+| `t`         | Toggle colour theme                                                               |
+| `f`         | Toggle the colour of "in the set" pixels (contrasted or natural progression)      |
+| `m`         | Toggle mouse control for adjusting the Julia parameter `C`                        |
+| `i`         | Zoom **in** at mouse location and reset mouse to center (use `I` for larger zoom) |
+| `o`         | Zoom **out** from mouse location (use `O` for larger zoom)                        |
+| `n`         | Cycle to the next fractal variant                                                 |
+| `1`         | Switch to Julia set                                                               |
+| `2`         | Switch to Mandelbrot set                                                          |
+| `3`         | Switch to Burning Ship set                                                        |
+| `,` / `.`   | Decrease / increase exponential colour bias                                       |
+| `<` / `>`   | Decrease / increase max escape steps                                              |
+| Mouse click | Center view on mouse location                                                     |
+| `a`         | Toggle animation for the Julia set                                                |
+| `g`         | Log current mouse position and fractal coordinates to terminal                    |
+| `l`         | Log current fractal state string to terminal                                      |
+| `L`         | Load fractal state string from user input (enter any key to cancel)               |
 
 ---
 

@@ -53,6 +53,9 @@ int main()
 	printf(" * [mouse down] - centre view on mouse.\n");
 	printf(" * a - toggle animation (julia set).\n");
 	printf(" * g - get details about the window location and points and log to terminal.\n");
+	printf(" * l - log current `state string` to terminal.\n");
+	printf(" * L - allow input to load `state string` (can input one character to cancel).\n");
+
 	// suggested workflow
 	// if too dark / too light change exp bias
 	// if run into black (or in set) blobs increase max escape steps

@@ -236,13 +236,16 @@ get_string_location()
     return str;
 }
 
-void handle_load()
+void handle_log_state()
 {
-    printf("Get string location\n");
+    printf("Current state:\n");
     char *current_state_str = get_string_location();
     printf("%s\n", current_state_str);
     free(current_state_str);
+}
 
+void handle_load_state()
+{
     char *input_str = malloc(string_state_length);
     printf("Enter state input:\n");
 
@@ -260,7 +263,6 @@ void handle_load()
 
     while (token != NULL)
     {
-        printf("Token: %s\n", token);
         switch (i)
         {
         case 0:
@@ -294,7 +296,7 @@ void handle_load()
             colour_theme_index = atoi(token);
             break;
         }
-        printf("%s, %d\n", token, i);
+        // printf("%s, %d\n", token, i);
         token = strtok(NULL, "|");
         i++;
     }

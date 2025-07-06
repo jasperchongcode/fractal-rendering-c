@@ -17,6 +17,7 @@ Currently supports the Mandelbrot set and Julia sets (try and uncover the intera
   - Various colour themes (including progressive and cyclical gradients).
 
 - Smooth animations via rotating complex parameter `C` in the Julia set.
+- Ability to save and load "views" with state strings (`l`/`L`).
 
 > **Note:** The y axis increases downwards (opposite to a standard graph) to make the mouse movements more intuitive.
 

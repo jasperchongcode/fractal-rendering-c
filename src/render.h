@@ -2,6 +2,15 @@
 #define RENDER_H
 
 #include "fractal.h"
+#include <stdint.h>
+
+typedef struct {
+    uint32_t* pixels;
+    double* escapeBuffer;
+} Resources;
+
+extern Resources data;
+
 extern Complex C;
 
 extern double y_max;

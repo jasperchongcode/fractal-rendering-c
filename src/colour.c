@@ -25,7 +25,7 @@ void initialise_colour_map()
         Uint8 blue = 0;
         Uint8 red = 0;
 
-        float scale = 3.0f * M_PI; // 1 full cycle
+        float scale = 3.0f * (float)M_PI; // 1 full cycle
         float stagger = 0.0f;      // optional per-pixel randomness
 
         // Handle different colour themes

@@ -4,6 +4,15 @@
 #include "render.h"
 #include "colour.h"
 #include "math.h"
+#include <signal.h>
+
+Resources data = {0};
+
+void handle_signal(int signal) {
+	if (signal) {
+		window_is_running = 0;
+	}
+}
 
 void setup(void)
 {
@@ -33,6 +42,24 @@ void update(void)
 
 int main()
 {
+	signal(SIGINT, handle_signal);
+
+	//! this is assuming window size stays constant
+	const size_t count = WINDOW_WIDTH * WINDOW_HEIGHT;
+	uint32_t* pixels = calloc(count, sizeof(uint32_t));
+
+	// Store the mutlisample escape steps per pixel (normalised 0-1)
+	// todo could be good to change this to double eventually
+	double* escapeBuffer = calloc(count, sizeof(double));
+
+	if ((pixels == NULL) || (escapeBuffer == NULL)) {
+		fprintf(stderr, "Malloc failed...\n");
+		return 1;
+	}
+
+	data.pixels = pixels;
+	data.escapeBuffer = escapeBuffer;
+
 	setup();
 
 	printf("Keybinds:\n");
@@ -68,6 +95,10 @@ int main()
 		process_input();
 		update(); // Uncomment to have animation option
 	}
+
+	// Free resources
+	free(data.pixels);
+	free(data.escapeBuffer);
 
 	destroy_window();
 	return 0;

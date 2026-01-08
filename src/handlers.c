@@ -107,7 +107,7 @@ void handle_zoom(float zoom_factor)
     render_fractal();
 }
 
-void centre_view(int x, int y)
+void centre_view(void)
 {
     // Make it so the fractal is locked when moving by default
     change_fractal_with_mouse = 0;

@@ -7,7 +7,7 @@ void toggle_run_animation(void);
 
 void handle_mouse_move(int x, int y);
 
-void centre_view(int x, int y);
+void centre_view(void);
 
 void handle_save_image(void);
 

@@ -1,6 +1,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "render.h"
 #include "constants.h"
 #include "fractal.h"
 #include "colour.h"
@@ -19,12 +20,10 @@ double y_max = DEFAULT_Y_MAX;
 // =============
 // = Variables =
 // =============
-uint32_t pixels[WINDOW_WIDTH * WINDOW_HEIGHT]; //! this is assuming window size stays constant
-// Store the mutlisample escape steps per pixel (normalised 0-1)
-// todo could be good to change this to double eventually
-double normalised_escape_step_buffer[WINDOW_WIDTH * WINDOW_HEIGHT];
+#define samples_per_pixel (SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH)
 
-int samples_per_pixel = SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH;
+// Constants required for multisampling
+#define image_samples_per_pixel (IMAGE_SAMPLE_GRID_WIDTH * IMAGE_SAMPLE_GRID_WIDTH)
 
 // offsets for multisampling
 double offsets_x[SAMPLE_GRID_WIDTH * SAMPLE_GRID_WIDTH];
@@ -50,23 +49,20 @@ void initialise_offsets(void)
 
 void render_fractal(void)
 {
+    uint32_t* pixels = data.pixels;
+    double* normalised_escape_step_buffer = data.escapeBuffer;
+
     SDL_RenderClear(renderer);
 
-    double pixel_width = (x_max - x_min) / WINDOW_WIDTH;
-    double pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
+    const double pixel_width = (x_max - x_min) / WINDOW_WIDTH;
+    const double pixel_height = (y_max - y_min) / WINDOW_HEIGHT;
 
     // ==============================
     // = // Calculate EscapeResults =
     // ==============================
 #pragma omp parallel
     {
-        // allocate memory for escapeResults for each thread
-        EscapeResult *escapeResults = malloc(samples_per_pixel * sizeof(EscapeResult));
-        if (!escapeResults)
-        {
-            printf("Error allocating memory for escapeResults");
-            exit(1);
-        }
+        EscapeResult escapeResults[samples_per_pixel];
 
 #pragma omp for schedule(dynamic, 1)
         for (int r = 0; r < WINDOW_HEIGHT; r++)
@@ -79,8 +75,8 @@ void render_fractal(void)
                 {
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    double base_re = x_min + c * pixel_width;
-                    double base_im = y_min + r * pixel_height;
+                    const double base_re = x_min + c * pixel_width;
+                    const double base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + offsets_x[s] * pixel_width;
@@ -89,12 +85,11 @@ void render_fractal(void)
                     escapeResults[s] = verify_in_fractal(point, C);
                 }
 
-                double normalised_escape_step = get_normalised_escape_step(escapeResults, samples_per_pixel);
+                const double normalised_escape_step = get_normalised_escape_step(escapeResults, samples_per_pixel);
 
                 normalised_escape_step_buffer[r * WINDOW_WIDTH + c] = normalised_escape_step;
             }
         }
-        free(escapeResults);
     }
 
     // ================================
@@ -119,7 +114,7 @@ void render_fractal(void)
         {
             ColourRGBA pixel_colour = get_pixel_colour(normalised_escape_step_buffer[r * WINDOW_WIDTH + c], min_normalised_escape_step);
 
-            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+            const uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
             pixels[r * WINDOW_WIDTH + c] = flat_colour;
         }
     }
@@ -133,16 +128,16 @@ void render_fractal(void)
     SDL_RenderPresent(renderer); // swap buffers
 }
 
-void render_save_fractal(char *filename, int window_width, int window_height)
+void render_save_fractal(char *filename, const int window_width, const int window_height)
 {
     // Allocate the pixel buffer
-    uint32_t *pixel_buffer = malloc(window_width * window_height * sizeof(uint32_t));
+    uint32_t *pixel_buffer = malloc((size_t)window_width * window_height * sizeof(uint32_t));
     if (!pixel_buffer)
     {
         fprintf(stderr, "Memory Allocation for Image Rendering failed. \n");
         return;
     }
-    double *image_normalised_escape_step_buffer = malloc(window_width * window_height * sizeof(double));
+    double *image_normalised_escape_step_buffer = malloc((size_t)window_width * window_height * sizeof(double));
     if (!image_normalised_escape_step_buffer)
     {
         fprintf(stderr, "Memory Allocation for normalised_escape_step_buffer Image Rendering failed. \n");
@@ -168,18 +163,12 @@ void render_save_fractal(char *filename, int window_width, int window_height)
         }
     }
     // Constants for finding representative points
-    double pixel_width = (x_max - x_min) / window_width;
-    double pixel_height = (y_max - y_min) / window_height;
+    const double pixel_width = (x_max - x_min) / window_width;
+    const double pixel_height = (y_max - y_min) / window_height;
 
 #pragma omp parallel
     {
-        // allocate for each thread
-        EscapeResult *escapeResults = malloc(image_samples_per_pixel * sizeof(EscapeResult));
-        if (!escapeResults)
-        {
-            printf("Error allocating image escapeResults");
-            exit(1);
-        }
+        EscapeResult escapeResults[image_samples_per_pixel];
 
 #pragma omp for schedule(dynamic, 1)
         for (int r = 0; r < window_height; r++)
@@ -194,8 +183,8 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                     // Get the complex coords of this point
                     Complex point;
                     // Base coordinates for this pixel (top-left corner)
-                    double base_re = x_min + c * pixel_width;
-                    double base_im = y_min + r * pixel_height;
+                    const double base_re = x_min + c * pixel_width;
+                    const double base_im = y_min + r * pixel_height;
 
                     // Add sample offsets scaled by pixel dimensions
                     point.re = base_re + image_offsets_x[s] * pixel_width;
@@ -214,7 +203,6 @@ void render_save_fractal(char *filename, int window_width, int window_height)
                 image_normalised_escape_step_buffer[r * window_width + c] = normalised_escape_step;
             }
         }
-        free(escapeResults);
     }
 
     // Strategy 1, find the min and then adjust the min
@@ -237,7 +225,7 @@ void render_save_fractal(char *filename, int window_width, int window_height)
         {
             ColourRGBA pixel_colour = get_pixel_colour(image_normalised_escape_step_buffer[r * window_width + c], min_normalised_escape_step);
 
-            uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
+            const uint32_t flat_colour = (pixel_colour.r << 24) | (pixel_colour.g << 16) | (pixel_colour.b << 8) | (pixel_colour.a);
             pixel_buffer[r * window_width + c] = flat_colour;
         }
     }

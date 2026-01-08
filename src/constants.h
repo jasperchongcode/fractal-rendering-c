@@ -1,3 +1,5 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #define FALSE 0
 #define TRUE 1
@@ -19,3 +21,5 @@
 
 #define ZOOM_FACTOR 1.05f
 #define ZOOM_INCREASE_FACTOR 1.5f // Factor applied when using shift+zoom
+
+#endif
